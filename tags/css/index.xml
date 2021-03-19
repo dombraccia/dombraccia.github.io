@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>css on Personal site for Domenick J. Braccia</title>
+    <link>https://dbraccia.com/tags/css/</link>
+    <description>Recent content in css on Personal site for Domenick J. Braccia</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 15 Aug 2020 13:22:10 +0530</lastBuildDate><atom:link href="https://dbraccia.com/tags/css/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Markdown syntax</title>
+      <link>https://dbraccia.com/_blog/markdown/</link>
+      <pubDate>Sat, 15 Aug 2020 13:22:10 +0530</pubDate>
+      
+      <guid>https://dbraccia.com/_blog/markdown/</guid>
+      <description>&lt;p&gt;This article offers a sample of basic Markdown syntax that can be used in Hugo content files, also it shows whether basic HTML elements are decorated with CSS in a Hugo theme.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Markdown syntax</title>
+      <link>https://dbraccia.com/_blog/markdown_1/</link>
+      <pubDate>Sat, 15 Aug 2020 13:22:10 +0530</pubDate>
+      
+      <guid>https://dbraccia.com/_blog/markdown_1/</guid>
+      <description>&lt;p&gt;This article offers a sample of basic Markdown syntax that can be used in Hugo content files, also it shows whether basic HTML elements are decorated with CSS in a Hugo theme.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Markdown syntax</title>
+      <link>https://dbraccia.com/_blog/markdown_2/</link>
+      <pubDate>Sat, 15 Aug 2020 13:22:10 +0530</pubDate>
+      
+      <guid>https://dbraccia.com/_blog/markdown_2/</guid>
+      <description>&lt;p&gt;This article offers a sample of basic Markdown syntax that can be used in Hugo content files, also it shows whether basic HTML elements are decorated with CSS in a Hugo theme.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Markdown syntax</title>
+      <link>https://dbraccia.com/_blog/markdown_3/</link>
+      <pubDate>Sat, 15 Aug 2020 13:22:10 +0530</pubDate>
+      
+      <guid>https://dbraccia.com/_blog/markdown_3/</guid>
+      <description>&lt;p&gt;This article offers a sample of basic Markdown syntax that can be used in Hugo content files, also it shows whether basic HTML elements are decorated with CSS in a Hugo theme.&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
