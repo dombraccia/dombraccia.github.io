@@ -119,6 +119,14 @@ footer {
   font-size: 48px;
 }
 
+#TableOfContents > ul li {
+  list-style-type: none;
+}
+
+#TableOfContents > ul li a {
+  color: black;
+}
+
 .mincho-font {
   font-family: "Shippori Mincho B1", serif;
 }
