@@ -4,7 +4,7 @@
 <head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
-<link rel="icon" href="/images/me.jpg" type="image/gif">
+<link rel="icon" href="/images/self_portrait_screen_shot.png" type="image/gif">
 
 
 <link rel="stylesheet" href="/css/bootstrap.min.css" media="all">
@@ -19,11 +19,13 @@
 
 </head>
 
-<body class="bg-white"><nav class="navbar navbar-expand-lg navbar-light shadow-sm bg-gradient-primary">
+<body class="bg-white">
+<script src="/js/jquery.slim.min.js"></script>
+<script src="/js/bootstrap.min.js"></script><nav class="navbar navbar-expand-lg navbar-light shadow-sm bg-gradient-primary">
 	<div class="container">
 		<a class="navbar-brand font-weight-bold" href="/">
 			
-			<img src="/images/me.jpg" width="30" height="30" class="d-inline-block align-top">
+			<img src="/images/self_portrait_screen_shot.png" width="30" height="30" class="d-inline-block align-top">
 			Domenick J. Braccia
 			
 		</a>
@@ -87,18 +89,15 @@
       
     </div>
   </div>
-
   <div class="container">
     <div class="row justify-content-center ">
-
-      <div class="col-md-9 p-3">
-        <div class="px-md-3">
-
+      <div class="col-md-9">
+        <div class="">
           
           <div class="py-2">
             
           </div>
-
+          
           
           <article>
             <h1 id="tldr">TL;DR</h1>
@@ -124,15 +123,6 @@ Long story short, I followed Duhigg’s plan he laid forth, and replaced my phon
 <p>I found this book to be incredibly helpful in my personal life for breaking tough habits as well as extremely informative on the power of habit on a national scale. I wanted this book in particular to be the first one that I write about on my Book Club page because I want growing this page to become a solid habit in my life. I’ve wanted to establish something like this Book Club for a long time, but I kept pushing it aside and telling myself I didn’t have time for it, or that it would get done at some point. However, with the habit changing tool kit and motivation provided by The Power of Habit, I feel empowered to keep this train rolling!</p>
 
           </article>
-          <div class="card">
-            <nav id="TableOfContents">
-  <ul>
-    <li><a href="#on-part-1-the-habits-of-individuals">On Part 1: The Habits of Individuals</a></li>
-    <li><a href="#noticing-cues">Noticing &ldquo;cues&rdquo;</a></li>
-    <li><a href="#hacking-the-habit-cycle">&ldquo;Hacking&rdquo; the habit cycle</a></li>
-  </ul>
-</nav>
-          </div>
         </div>
         
         <div class="p-5">
@@ -141,7 +131,7 @@ Long story short, I followed Duhigg’s plan he laid forth, and replaced my phon
             <div class="card-body">
               
               
-              <a href="/%20/tags/book-review" class="btn btn-outline-danger btn-rounded mb-2">
+              <a href=/tags/book-review class="btn btn-outline-danger btn-rounded mb-2">
                 book review
               </a>
               
@@ -157,11 +147,19 @@ Long story short, I followed Duhigg’s plan he laid forth, and replaced my phon
     </div>
   </div>
 </section>
+
+<script>
+  $('.TOC').on('click', function () {
+    $('.TOC-content').removeClass('d-none');
+  });
+</script>
 <footer>
     
     <div class="news container py-3">
         
     </div>
+    
+
     <div class="text-center">
         
         <span class="px-1">
@@ -208,12 +206,13 @@ Long story short, I followed Duhigg’s plan he laid forth, and replaced my phon
 
         
     </div>
+    
     <div class="container bg-transparent py-4">
         <div class="row justify-content-center">
             <div class="col-md-4 text-center order-2 order-lg-1 order-md-1">
                 <div class="pb-2">
                     <a href="https://dbraccia.com/">
-                        <img alt="Footer logo" src="/images/me.jpg"
+                        <img alt="Footer logo" src="/images/self_portrait_screen_shot.png"
                             height="40px" width="40px">
                     </a>
                 </div>
@@ -225,8 +224,6 @@ Long story short, I followed Duhigg’s plan he laid forth, and replaced my phon
             </div>
         </div>
     </div>
-</footer>
-<script src="/js/jquery.slim.min.js"></script>
-<script src="/js/bootstrap.min.js"></script></body>
+</footer></body>
 
 </html>

@@ -4,7 +4,7 @@
 <head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
-<link rel="icon" href="/images/me.jpg" type="image/gif">
+<link rel="icon" href="/images/self_portrait_screen_shot.png" type="image/gif">
 
 
 <link rel="stylesheet" href="/css/bootstrap.min.css" media="all">
@@ -19,11 +19,13 @@
 
 </head>
 
-<body class="bg-white"><nav class="navbar navbar-expand-lg navbar-light shadow-sm bg-gradient-primary">
+<body class="bg-white">
+<script src="/js/jquery.slim.min.js"></script>
+<script src="/js/bootstrap.min.js"></script><nav class="navbar navbar-expand-lg navbar-light shadow-sm bg-gradient-primary">
 	<div class="container">
 		<a class="navbar-brand font-weight-bold" href="/">
 			
-			<img src="/images/me.jpg" width="30" height="30" class="d-inline-block align-top">
+			<img src="/images/self_portrait_screen_shot.png" width="30" height="30" class="d-inline-block align-top">
 			Domenick J. Braccia
 			
 		</a>
@@ -79,18 +81,15 @@
       
     </div>
   </div>
-
   <div class="container">
     <div class="row justify-content-center ">
-
-      <div class="col-md-9 p-3">
-        <div class="px-md-3">
-
+      <div class="col-md-9">
+        <div class="">
           
           <div class="py-2">
             
           </div>
-
+          
           
           <article>
             <h1 id="domenick-j-braccia">Domenick J. Braccia</h1>
@@ -125,7 +124,7 @@
 <h3 id="__awards__"><strong>Awards</strong></h3>
 <p>National Science Foundation Research Traineeship (<a href="http://www.combine.umd.edu/">COMBINE</a>)  . . . . . . . . . . . . . . . . <code>2020-2021</code></p>
 <p>Dean&rsquo;s Fellowship  . . . . . . . . . . . . . . .  . . . . . . . . . . . . . . .  . . . . . . . . . . . . . . . . . . . . . . . . <code>2017</code>, <code>2018</code>, <code>2020</code></p>
-<p>Travel Grant (COMBINE)  . . . . . . . . . . . . . . .  . . . . . . . . . . . . . . . . . . . .  . . . . . . . . . . . . . . . . . . . <code>2018</code></p>
+<p>Travel Grant (COMBINE)  . . . . . . . . . . . . . . . . . . .  . . . . . . . . . . . . . . . . . . . .  . . . . . . . . . . . . . . . . . . <code>2018</code></p>
 <p>Research Experience for Physics Undergraduates  . . . . . . . . . . . . . . .  . . . . . . . . . . . . . . . . . . . . <code>2015</code></p>
 <h3 id="__instructional-experience__"><strong>Instructional Experience</strong></h3>
 <h4 id="mammalian-physiology-laboratory">Mammalian Physiology Laboratory</h4>
@@ -154,21 +153,6 @@
 <!-- raw HTML omitted -->
 
           </article>
-          <div class="card">
-            <nav id="TableOfContents">
-  <ul>
-    <li>
-      <ul>
-        <li><a href="#__research-interests__"><strong>Research Interests</strong></a></li>
-        <li><a href="#__education__"><strong>Education</strong></a></li>
-        <li><a href="#__publications__"><strong>Publications</strong></a></li>
-        <li><a href="#__awards__"><strong>Awards</strong></a></li>
-        <li><a href="#__instructional-experience__"><strong>Instructional Experience</strong></a></li>
-      </ul>
-    </li>
-  </ul>
-</nav>
-          </div>
         </div>
         
         <div class="p-5">
@@ -187,11 +171,19 @@
     </div>
   </div>
 </section>
+
+<script>
+  $('.TOC').on('click', function () {
+    $('.TOC-content').removeClass('d-none');
+  });
+</script>
 <footer>
     
     <div class="news container py-3">
         
     </div>
+    
+
     <div class="text-center">
         
         <span class="px-1">
@@ -238,12 +230,13 @@
 
         
     </div>
+    
     <div class="container bg-transparent py-4">
         <div class="row justify-content-center">
             <div class="col-md-4 text-center order-2 order-lg-1 order-md-1">
                 <div class="pb-2">
                     <a href="https://dbraccia.com/">
-                        <img alt="Footer logo" src="/images/me.jpg"
+                        <img alt="Footer logo" src="/images/self_portrait_screen_shot.png"
                             height="40px" width="40px">
                     </a>
                 </div>
@@ -255,8 +248,6 @@
             </div>
         </div>
     </div>
-</footer>
-<script src="/js/jquery.slim.min.js"></script>
-<script src="/js/bootstrap.min.js"></script></body>
+</footer></body>
 
 </html>
