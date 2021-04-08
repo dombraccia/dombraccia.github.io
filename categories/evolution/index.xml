@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>evolution on Domenick J. Braccia</title>
+    <link>https://dbraccia.com/categories/evolution/</link>
+    <description>Recent content in evolution on Domenick J. Braccia</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 07 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://dbraccia.com/categories/evolution/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Why Extremeophiles Matter</title>
+      <link>https://dbraccia.com/blog/extremophiles/</link>
+      <pubDate>Wed, 07 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://dbraccia.com/blog/extremophiles/</guid>
+      <description>How is it that earth has undergone 5 mass extinctions in its existence and life still seems to find a way to thrive here? Truly, in a universe where everything is constantly headed towards a state of higher entropy, do organisms such as these little microbes (find a way) to thrive in the most harsh, hot, acidic and nutrient deprived environments?
+How life survived the extinctions where we are today where we (and these creatures) are headed </description>
+    </item>
+    
+  </channel>
+</rss>
