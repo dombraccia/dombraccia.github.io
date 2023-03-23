@@ -1,0 +1,41 @@
+/* document settings */ 
+
+html {
+    font-family: 'PT Mono';
+    background-color: antiquewhite;
+}
+
+/* header settings */ 
+
+.header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 5rem;
+    padding: 0 3%;
+    background-color: white;
+    font-size: xx-large;
+    font-weight: bold;
+    border: 3px solid black;
+    border-radius: 5px;
+}
+
+.header .name {
+    flex-grow: 1;
+}
+
+.header span a {
+    text-decoration: none;
+    color: hsl(158, 31%, 33%);
+}
+
+.header li {
+    display: inline;
+    font-size: x-large;
+    padding: 20px;
+}
+
+.header li a {
+    text-decoration: none;
+    color: #4a4a4a;
+}
