@@ -41,7 +41,9 @@ html {
 }
 
 .contentbox {
-    margin-top: 5px;
+    margin-top: 25px;
+    margin-left: 100px;
+    margin-right: 100px;
     background-color: white;
     border: 3px solid black;
     border-radius: 5px;
@@ -54,4 +56,11 @@ html {
 
 .contentbox ul {
     padding-left: 5%;
+}
+
+.contentbox iframe {
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-bottom: 30px;
+    border: none;
 }
