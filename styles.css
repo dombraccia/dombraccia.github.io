@@ -12,7 +12,7 @@ html {
     justify-content: space-around;
     align-items: center;
     height: 5rem;
-    padding: 0 3%;
+    padding: 0 1%;
     background-color: white;
     font-size: xx-large;
     font-weight: bold;
@@ -24,6 +24,13 @@ html {
     flex-grow: 1;
 }
 
+.header .logo img {
+    height: 60px;
+    width: auto;
+    float: left;
+    padding-right: 10px;
+}
+
 .header span a {
     text-decoration: none;
     color: hsl(158, 31%, 33%);
@@ -32,7 +39,7 @@ html {
 .header li {
     display: inline;
     font-size: x-large;
-    padding: 20px;
+    padding: 10px;
 }
 
 .header li a {
@@ -53,14 +60,16 @@ html {
     padding-left: 3%;
 }
 
-
 .contentbox ul {
     padding-left: 5%;
 }
 
 .contentbox embed {
-    padding-left: 6%;
-    padding-right: 6%;
-    padding-bottom: 30px;
+    display: block;
+    position: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    padding-top: 3%;
     border: none;
 }
