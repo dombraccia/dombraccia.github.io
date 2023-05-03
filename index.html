@@ -2,36 +2,42 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=firefox">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Domenick J. Braccia</title>
-    <link rel="stylesheet" href="styles.css" type="text/css" />
+    <title>Domenick's home page</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="header">
-        <div class="logo">
-            <a href="index.html"><img src="content/me-2022.jpg" alt="Domenick in 2022"/></a>
+    <header>
+        <div class="container">
+            <h2><a href="index.html">Domenick J. Braccia, Ph.D.</a></h2>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="html/cv.html">CV</a></li>
+                </ul>
+            </nav>
         </div>
-        <span class="name"><a href="index.html">Domenick J. Braccia</a></span>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="html/cv.html">CV</a></li>
-            <li><a href="html/blog.html">Blog</a></li>
-        </ul>
-    </div>
+    </header>
+    <div class="spacer"></div>
+    <section class="about">
+        <div class="container">
+            <div class="image">
+                <img src="me-2022.jpg" alt="domenick">
+            </div>
 
-    <div class="contentbox">
-        <h1 id="header">Under construction...</h1>
-            <p>Domenick's personal site is currently undergoing some changes... It will be back and better than ever very soon</p>
-            <p>For now, you can follow this link to my <a href="pdf/domenick_braccia_CV_20230412.pdf">CV</a>,</p>
-            <p>Find links to some of my work on 
-                <a href="https://scholar.google.com/citations?user=dIU2dxEAAAAJ&hl=en" target="_blank">Google Scholar</a> and 
-                <a href="https://github.com/dombraccia" target="_blank">Github</a>.</p>
-            <p>And you can check out my 
-                <a href="https://www.linkedin.com/in/dombraccia/" target="_blank">Linkedin</a> and
-                <a href="https://twitter.com/dombraccia" target="_blank">Twitter</a> profiles.
-            </p>
-    </div>
-
-</body>
-</html>
+            <div class="text">
+                <h1>About me</h1>
+                <p>I am currently a <strong>Bioinformatics Consultant</strong> contracting through <a href="https://www.cmcherryconsulting.com/" target="_blank">C.M. Cherry Consulting</a>.</p>
+                <p>Prior to that, I worked at mid-sized Boston startup as a Bioinformatics Data Scientist where I analyzed genomic, transcriptomic, and proteomic data in support of early Biomarker Discovery.</p>
+                <p>I received my Ph.D. from the University of Maryland where I built robust bioinformatic pipelines characterizing health relevant functions of the human gut microbiome.</p>
+                <p>You can find links to my work on 
+                    <a href="https://scholar.google.com/citations?user=dIU2dxEAAAAJ&hl=en" target="_blank">Google Scholar</a> and 
+                    <a href="https://github.com/dombraccia" target="_blank">Github</a>.</p>
+                <p>Other useful links: 
+                    <a href="html/cv.html">CV</a>, 
+                    <a href="https://www.linkedin.com/in/dombraccia/" target="_blank">Linkedin</a>,
+                    <a href="https://twitter.com/dombraccia" target="_blank">Twitter</a>
+                </p>
+            </div>
+        </div>  
+    </section>
