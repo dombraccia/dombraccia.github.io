@@ -149,4 +149,10 @@ nav a {
     .about {
         height: 975px;
     }
+    header {
+        font-size: 12px;
+    }
+    header a {
+        font-size: 12px;
+    }
 }
