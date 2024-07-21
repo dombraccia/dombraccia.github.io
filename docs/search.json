@@ -1,0 +1,79 @@
+[
+  {
+    "objectID": "cv.html",
+    "href": "cv.html",
+    "title": "Domenick’s CV",
+    "section": "",
+    "text": "Download the PDF version here: CV"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Domenick J. Braccia",
+    "section": "",
+    "text": "About Me\n\nI use bioinformatics, data science, and machine learning to study human health and disease. I’m particularly interested in improving outcomes in autoimmune disease.\nI am currently a Scientist of Computational Biology at Cabaletta Bio.\nYou can find links to my work on Google Scholar and Github.\n\n\nFeatured Publications\n\nBilR is a gut microbial enzyme that reduces bilirubin to urobilinogen\n\n\nAuthors\n\n: Hall B, Levy S, Dufault-Thompson K, Arp G, Zhong A, Ndjite GM, Weiss A, Braccia D, Jenkins C, Grant MR, Abeysinghe S, Yang Y, Jermain MD, Wu C, Bing Ma B & Jiang X.\n\nJournal\n\n: Nature Microbiology, 2024, Full text\n\nGut Microbiome–Wide Search for Bacterial Azoreductases Reveals Uncharacterized Azoreductases in Fusobacterium nucleatum, Bacteroides fragilis, and Clostridium clostridioforme\n\n\nAuthors\n\n: Braccia DJ, Ndjite GM, Weiss A, Levy S, Abeysinghe S, Jiang X, Pop M, Hall B.\n\nJournal\n\n: Drug Metabolism and Disposition, 2023, Full text\n\nThe Capacity to Produce H2S via Cysteine Degradation Is Ubiquitous in the Human Gut Microbiome\n\n\nAuthors\n\n: Braccia DJ, Jiang X, Pop M, Hall AB\n\nJournal\n\n: Frontiers in Microbiology, 2021, Full text\n\n\n\n\nContact\n\nEmail: domenick.braccia@gmail.com\nLinkedin: Linkedin\nTwitter: Twitter\n\n\nLast updated on 21.07.2024"
+  },
+  {
+    "objectID": "posts/bioinformatics-workflow-2024/index.html",
+    "href": "posts/bioinformatics-workflow-2024/index.html",
+    "title": "How to setup a bioinformatics analysis workflow in 2024 with VSCode, Quarto, and Mamba",
+    "section": "",
+    "text": "The bioinformatics and computational biology discipline has seen dramatic growth in the last decade and is projected to continue growing.1 As the field continues to evolve, the software and computational tools do as well, so having a reliable and stable workflow is essential.\nEveryone has a prefered coding workflow, and no one setup is perfect. That being said, I have found that the combination of Visual Studio Code (VSCode) for IDE, Quarto for creating notebooks, and Mamba for package management is a dynamic and powerful bioinformatics workflow in 2024!"
+  },
+  {
+    "objectID": "posts/bioinformatics-workflow-2024/index.html#install-visual-studio-code",
+    "href": "posts/bioinformatics-workflow-2024/index.html#install-visual-studio-code",
+    "title": "How to setup a bioinformatics analysis workflow in 2024 with VSCode, Quarto, and Mamba",
+    "section": "1. Install Visual Studio Code",
+    "text": "1. Install Visual Studio Code\nI use VSCode for almost all of my coding tasks. With extensions for Git, Jupyter, Docker, Remote-SSH, and linters for R, Python, Julia, and almost any coding language you can imagine, it is an extremely versatile IDE.2\nAfter you have installed VSCode, install extensions for:\n\nR\nPython\nQuarto\n\n\n\n\nInstalling VSCode extensions"
+  },
+  {
+    "objectID": "posts/bioinformatics-workflow-2024/index.html#install-quarto",
+    "href": "posts/bioinformatics-workflow-2024/index.html#install-quarto",
+    "title": "How to setup a bioinformatics analysis workflow in 2024 with VSCode, Quarto, and Mamba",
+    "section": "2. Install Quarto",
+    "text": "2. Install Quarto\nQuarto is a document authoring tool that allows you to create rich text documents with code, output, and narrative text. It is a great tool for mixing code, explainations, and any interesting results you find. I mostly choose Quarto over Jupyter notebooks3 for the following reasons:\n\nLanguage agnostic: Quarto allows you to code in multiple languages in the same document. This is highly relevant in bioinformatics where you may need to switch between R and Python regularly for access to different packages.\nVersion control: Quarto documents are plain text files, making them easy to version control with Git.\nCustomizable output: You can output your document in multiple formats (HTML, PDF, Word, etc.) with a single command.\nConversion to Jupyter notebooks: Quarto documents can easily be converted to Jupyter notebooks and vice versa, so you are never locked-in to one notebook system."
+  },
+  {
+    "objectID": "posts/bioinformatics-workflow-2024/index.html#download-miniforge-mamba",
+    "href": "posts/bioinformatics-workflow-2024/index.html#download-miniforge-mamba",
+    "title": "How to setup a bioinformatics analysis workflow in 2024 with VSCode, Quarto, and Mamba",
+    "section": "3. Download Miniforge (mamba)",
+    "text": "3. Download Miniforge (mamba)\nMiniforge is a package manager based on Conda. It allows you to create isolated coding environments with specific package versions required for your project. I prefer miniforge (mamba) over Anaconda or Miniconda because it is faster and more efficient. And if you’re already familiar with conda environments, just replace conda with mamba in your commands and you are good to go!\nTo install Miniforge, run the following commands in your VSCode terminal:\n# Run the following commands in your VSCode terminal. press: (ctrl + `)\ncurl -L -O \"https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh\"\nbash Miniforge3-$(uname)-$(uname -m).sh\nAlternatively, you can use wget to download the Miniforge installer:\nwget \"https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh\"\nbash Miniforge3-$(uname)-$(uname -m).sh\nWe will return to this part after step 4, cloning a git repository."
+  },
+  {
+    "objectID": "posts/bioinformatics-workflow-2024/index.html#git-clone-a-repository",
+    "href": "posts/bioinformatics-workflow-2024/index.html#git-clone-a-repository",
+    "title": "How to setup a bioinformatics analysis workflow in 2024 with VSCode, Quarto, and Mamba",
+    "section": "4. git clone a repository",
+    "text": "4. git clone a repository\nWe will now work out of a repo set up with a minimal example of a bioinformatics analysis project. This next part required that you have Git downloaded, so if you don’t have it yet, you can download it here.\n# Run the following commands in your VSCode terminal. press: (ctrl + `)\ngit clone https://github.com/dombraccia/bioinfo-2024.git\ncd bioinfo-2024\nNow, we can get back to creating a mamba environment."
+  },
+  {
+    "objectID": "posts/bioinformatics-workflow-2024/index.html#create-a-mamba-environment",
+    "href": "posts/bioinformatics-workflow-2024/index.html#create-a-mamba-environment",
+    "title": "How to setup a bioinformatics analysis workflow in 2024 with VSCode, Quarto, and Mamba",
+    "section": "5. Create a mamba environment",
+    "text": "5. Create a mamba environment\nOnce you have Miniforge installed, and you are in the bioinfo-2024/ folder, we can create a new mamba environment. The following code will:\n\ncreate a new mamba environment named bioinfo-2024\nselects python version 3.12\ninstalls the packages listed in the environment.yml file\nactivates the bioinfo-2024 environment\n\n# run these commands in the VSCode terminal\nmamba create -n bioinfo python=3.12 -f environment.yml\nmamba activate bioinfo\nOops! We forgot to add the numpy package to the environment.yml file. Let’s add it now:\n# make sure you have the bioinfo environment activated\nmamba install numpy\nYou can always add packages to an active mamba environment with mamba install.\nLearn more about customizing yml files here."
+  },
+  {
+    "objectID": "posts/bioinformatics-workflow-2024/index.html#render-a-quarto-document",
+    "href": "posts/bioinformatics-workflow-2024/index.html#render-a-quarto-document",
+    "title": "How to setup a bioinformatics analysis workflow in 2024 with VSCode, Quarto, and Mamba",
+    "section": "6. Render a Quarto document",
+    "text": "6. Render a Quarto document\nTo test your environment setup, render the bioinfo-2024.qmd notebook:\n# in the bioinfo-2024/ directory\nquarto render bioinfo-2024.qmd --to html\nThis command will render the Quarto document to HTML by default, but it also supports PDF, Word, and other formats.\nBut by far my favorite feature of the quarto cli, is the quarto convert command:\n# Convert qmd &lt;==&gt; ipynb by default, or specify the output format (pdf, html, ...) \nquarto convert bioinfo-2024.qmd --to ipynb\nquarto convert bioinfo-2024.ipynb --to qmd\nquarto convert automatically converts qmd &lt;==&gt; ipynb. I use this feature quite often when collaborating with others who prefer Jupyter notebooks."
+  },
+  {
+    "objectID": "posts/bioinformatics-workflow-2024/index.html#footnotes",
+    "href": "posts/bioinformatics-workflow-2024/index.html#footnotes",
+    "title": "How to setup a bioinformatics analysis workflow in 2024 with VSCode, Quarto, and Mamba",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nBioinformatics Market Size, Share & Trends Analysis Report↩︎\nAlternatives to VSCode include: Rstudio, Jupyter Lab, and PyCharm. Ultimately, your choice of IDE essentially comes down to personal preference, so don’t spend too much time thinking about it.↩︎\nThe one instance in which I still use Jupyter notebooks/Jupyter Lab over Quarto is when I need my notebook environment to stay running for a long time. This can happen when processing large single cell datasets and running compute-heavy ML models that can sometimes take days to train.↩︎"
+  },
+  {
+    "objectID": "posts.html",
+    "href": "posts.html",
+    "title": "Blog",
+    "section": "",
+    "text": "How to setup a bioinformatics analysis workflow in 2024 with VSCode, Quarto, and Mamba\n\n\n\nPython\n\n\nR\n\n\ndata\n\n\nbioinformatics\n\n\ntutorial\n\n\n\n\n\n\n\nDomenick J. Braccia\n\n\nJul 21, 2024\n\n\n\n\n\n\n\n\nNo matching items"
+  }
+]
