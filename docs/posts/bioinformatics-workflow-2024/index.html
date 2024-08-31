@@ -334,8 +334,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- script below ensures each link will create a new tab -->
 <script> 
 document.addEventListener("DOMContentLoaded", function(){
-  // Select all anchor tags in the document
-  var links = document.querySelectorAll('a');
+  // Select all anchor tags in the document except those with href starting with '#'
+  var links = document.querySelectorAll('a:not([href^="#"])');
   
   // Set the target attribute to '_blank' for each link
   links.forEach(function(link){
