@@ -217,28 +217,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="quick-start" class="level1">
 <h1>Quick Start</h1>
 <blockquote class="blockquote">
-<p><strong>Attention Windows Users</strong>: This tutorial is tailored towards MacOS and Linux OS. For dedicated Windows users, I recommend this <a href="https://medium.com/@larysha.rothmann/getting-started-with-wsl-for-bioinformatics-setting-up-a-fully-functional-and-pretty-53b9c79b5380">blog post</a> by Larysha Rothmann.</p>
+<p><strong>Attention Windows Users</strong>: This tutorial is tailored towards MacOS and Linux OS. For dedicated Windows users, I recommend this <a href="https://medium.com/@larysha.rothmann/getting-started-with-wsl-for-bioinformatics-setting-up-a-fully-functional-and-pretty-53b9c79b5380" target="_blank">blog post</a> by Larysha Rothmann.</p>
 </blockquote>
 <ol type="1">
-<li><p>Install <a href="https://code.visualstudio.com/download">VSCode</a> and relevant extensions:</p>
+<li><p>Install <a href="https://code.visualstudio.com/download" target="_blank">VSCode</a> and relevant extensions:</p>
 <ul>
 <li>R</li>
 <li>Python</li>
 <li>Quarto</li>
 </ul></li>
-<li><p>Install <a href="https://quarto.org/docs/get-started/">Quarto</a> for creating rich text documents.</p></li>
-<li><p>Download <a href="https://github.com/conda-forge/miniforge#Download">miniforge</a> for creating stable and reproducible coding environments.</p></li>
+<li><p>Install <a href="https://quarto.org/docs/get-started/" target="_blank">Quarto</a> for creating rich text documents.</p></li>
+<li><p>Download <a href="https://github.com/conda-forge/miniforge#Download" target="_blank">miniforge</a> for creating stable and reproducible coding environments.</p></li>
 </ol>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the following commands in your VSCode terminal. press: (ctrl + `)</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> <span class="at">-O</span> <span class="st">"https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-</span><span class="va">$(</span><span class="fu">uname</span><span class="va">)</span><span class="st">-</span><span class="va">$(</span><span class="fu">uname</span> <span class="at">-m</span><span class="va">)</span><span class="st">.sh"</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> Miniforge3-<span class="va">$(</span><span class="fu">uname</span><span class="va">)</span>-<span class="va">$(</span><span class="fu">uname</span> <span class="at">-m</span><span class="va">)</span>.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol start="4" type="1">
-<li>Clone the <a href="https://github.com/dombraccia/bioinfo-2024.git">bioinfo-2024</a> repository.</li>
+<li>Clone the <a href="https://github.com/dombraccia/bioinfo-2024.git" target="_blank">bioinfo-2024</a> repository.</li>
 </ol>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/dombraccia/bioinfo-2024.git</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> bioinfo-2024</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol start="5" type="1">
-<li>Create a stable coding environment with <a href="https://mamba.readthedocs.io/en/latest/user_guide/mamba.html#mamba">mamba</a>.</li>
+<li>Create a stable coding environment with <a href="https://mamba.readthedocs.io/en/latest/user_guide/mamba.html#mamba" target="_blank">mamba</a>.</li>
 </ol>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># in the bioinfo-2024/ directory</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">mamba</span> env create <span class="at">-n</span> bioinfo python=3.12 <span class="at">-f</span> environment.yml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -253,7 +253,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Instructions</h1>
 <section id="install-visual-studio-code" class="level2">
 <h2 class="anchored" data-anchor-id="install-visual-studio-code">1. Install Visual Studio Code</h2>
-<p>I use <a href="https://code.visualstudio.com/">VSCode</a> for almost all of my coding tasks. With extensions for Git, Jupyter, Docker, Remote-SSH, and linters for R, Python, Julia, and almost any coding language you can imagine, it is an extremely versatile IDE.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>I use <a href="https://code.visualstudio.com/" target="_blank">VSCode</a> for almost all of my coding tasks. With extensions for Git, Jupyter, Docker, Remote-SSH, and linters for R, Python, Julia, and almost any coding language you can imagine, it is an extremely versatile IDE.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <p>After you have installed VSCode, install extensions for:</p>
 <ul>
 <li>R</li>
@@ -269,7 +269,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="install-quarto" class="level2">
 <h2 class="anchored" data-anchor-id="install-quarto">2. Install Quarto</h2>
-<p><a href="https://quarto.org/docs/get-started/">Quarto</a> is a document authoring tool that allows you to create rich text documents with code, output, and narrative text. It is a great tool for mixing code, explainations, and any interesting results you find. I mostly choose Quarto over Jupyter notebooks<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> for the following reasons:</p>
+<p><a href="https://quarto.org/docs/get-started/" target="_blank">Quarto</a> is a document authoring tool that allows you to create rich text documents with code, output, and narrative text. It is a great tool for mixing code, explainations, and any interesting results you find. I mostly choose Quarto over Jupyter notebooks<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> for the following reasons:</p>
 <ul>
 <li><u>Language agnostic</u>: Quarto allows you to code in multiple languages in the same document. This is highly relevant in bioinformatics where you may need to switch between R and Python regularly for access to different packages.</li>
 <li><u>Version control</u>: Quarto documents are plain text files, making them easy to version control with Git.</li>
@@ -279,7 +279,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="download-miniforge-mamba" class="level2">
 <h2 class="anchored" data-anchor-id="download-miniforge-mamba">3. Download Miniforge (<code>mamba</code>)</h2>
-<p><a href="https://github.com/conda-forge/miniforge?tab=readme-ov-file#miniforge">Miniforge</a> is a package manager based on <a href="https://docs.conda.io/en/latest/">Conda</a>. It allows you to create isolated coding environments with specific package versions required for your project. I prefer miniforge (<code>mamba</code>) over Anaconda or Miniconda because it is faster and more efficient. And if you’re already familiar with conda environments, just replace <code>conda</code> with <code>mamba</code> in your commands and you are good to go!</p>
+<p><a href="https://github.com/conda-forge/miniforge?tab=readme-ov-file#miniforge" target="_blank">Miniforge</a> is a package manager based on <a href="https://docs.conda.io/en/latest/" target="_blank">Conda</a>. It allows you to create isolated coding environments with specific package versions required for your project. I prefer miniforge (<code>mamba</code>) over Anaconda or Miniconda because it is faster and more efficient. And if you’re already familiar with conda environments, just replace <code>conda</code> with <code>mamba</code> in your commands and you are good to go!</p>
 <p>To install Miniforge, run the following commands in your VSCode terminal:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the following commands in your VSCode terminal. press: (ctrl + `)</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> <span class="at">-O</span> <span class="st">"https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-</span><span class="va">$(</span><span class="fu">uname</span><span class="va">)</span><span class="st">-</span><span class="va">$(</span><span class="fu">uname</span> <span class="at">-m</span><span class="va">)</span><span class="st">.sh"</span></span>
@@ -291,7 +291,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="git-clone-a-repository" class="level2">
 <h2 class="anchored" data-anchor-id="git-clone-a-repository">4. <code>git clone</code> a repository</h2>
-<p>We will now work out of a repo set up with a minimal example of a bioinformatics analysis project. This next part required that you have Git downloaded, so if you don’t have it yet, you can download it <a href="https://git-scm.com/downloads">here</a>.</p>
+<p>We will now work out of a repo set up with a minimal example of a bioinformatics analysis project. This next part required that you have Git downloaded, so if you don’t have it yet, you can download it <a href="https://git-scm.com/downloads" target="_blank">here</a>.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the following commands in your VSCode terminal. press: (ctrl + `)</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/dombraccia/bioinfo-2024.git</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> bioinfo-2024</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -313,7 +313,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make sure you have the bioinfo environment activated</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">mamba</span> install numpy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>You can always add packages to an active mamba environment with <code>mamba install</code>.</p>
-<p>Learn more about customizing yml files <a href="https://mamba.readthedocs.io/en/latest/user_guide/mamba.html#yml-files">here</a>.</p>
+<p>Learn more about customizing yml files <a href="https://mamba.readthedocs.io/en/latest/user_guide/mamba.html#yml-files" target="_blank">here</a>.</p>
 </section>
 <section id="render-a-quarto-document" class="level2">
 <h2 class="anchored" data-anchor-id="render-a-quarto-document">6. Render a Quarto document</h2>
@@ -331,18 +331,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="conclusion" class="level1">
 <h1>Conclusion</h1>
 <p>Hopefully this tutorial helped set up a local bioinformatics workflow with VSCode, Quarto, and Mamba. If you have any questions or notice any errors, do reachout to me at domenick [at] dbraccia [dot] com. Happy coding!</p>
-<!-- script below ensures each link will create a new tab -->
-<script> 
-document.addEventListener("DOMContentLoaded", function(){
-  // Select all anchor tags in the document except those with href starting with '#'
-  var links = document.querySelectorAll('a:not([href^="#"])');
-  
-  // Set the target attribute to '_blank' for each link
-  links.forEach(function(link){
-    link.setAttribute('target', '_blank');
-  });
-});
-</script>
 
 
 </section>
@@ -351,8 +339,8 @@ document.addEventListener("DOMContentLoaded", function(){
 <div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p><a href="https://www.grandviewresearch.com/industry-analysis/bioinformatics-industry">Bioinformatics Market Size, Share &amp; Trends Analysis Report</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>Alternatives to VSCode include: <a href="https://www.rstudio.com/products/rstudio/download/">Rstudio</a>, <a href="https://jupyter.org/install">Jupyter Lab</a>, and <a href="https://www.jetbrains.com/pycharm/download/">PyCharm</a>. Ultimately, your choice of IDE essentially comes down to personal preference, so don’t spend too much time thinking about it.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p><a href="https://www.grandviewresearch.com/industry-analysis/bioinformatics-industry" target="_blank">Bioinformatics Market Size, Share &amp; Trends Analysis Report</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Alternatives to VSCode include: <a href="https://www.rstudio.com/products/rstudio/download/">Rstudio</a>, <a href="https://jupyter.org/install" target="_blank">Jupyter Lab</a>, and <a href="https://www.jetbrains.com/pycharm/download/" target="_blank">PyCharm</a>. Ultimately, your choice of IDE essentially comes down to personal preference, so don’t spend too much time thinking about it.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>The one instance in which I still use Jupyter notebooks/Jupyter Lab over Quarto is when I need my notebook environment to stay running for a long time. This can happen when processing large single cell datasets and running compute-heavy ML models that can sometimes take days to train.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
