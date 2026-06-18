@@ -1,4 +1,4 @@
-``---
+---
 title: "Domenick J. Braccia"
 format: html
 css: styles.css
@@ -10,32 +10,20 @@ css: styles.css
 
 ![](assets/DSC08728cropped.jpg){.profile-pic} 
 
-I use bioinformatics, data science, and machine learning to study human health and disease. I'm particularly interested in improving outcomes in autoimmune disease.
+I am a Sr. Scientist in Computational Biology at <a href="https://cabalettabio.com/" target="_blank">Cabaletta Bio</a>. I apply bioinformatics, data science, and machine learning to the study autoimmune disease.
 
-I am currently a Senior Scientist of Computational Biology at <a href="https://cabalettabio.com/" target="_blank">Cabaletta Bio</a>.
+Useful links: <a href="https://scholar.google.com/citations?user=dIU2dxEAAAAJ&hl=en" target="_blank">Google Scholar</a>  |  <a href="https://github.com/dombraccia" target="_blank">Github</a>  |  <a href="https://www.linkedin.com/in/dombraccia/" target="_blank">Linkedin</a>  |  <a href="https://twitter.com/dombraccia" target="_blank">Twitter</a>
 
-You can find links to my work on <a href="https://scholar.google.com/citations?user=ovOqiWYAAAAJ&hl=en" target="_blank">Google Scholar</a> and <a href="https://github.com/dombraccia" target="_blank">Github</a>.
+# Recent Publications
 
-# Featured Publications
+### 2025 
 
-1. **BilR is a gut microbial enzyme that reduces bilirubin to urobilinogen**
-    - <ins>Authors</ins>: Hall B, Levy S, Dufault-Thompson K, Arp G, Zhong A, Ndjite GM, Weiss A, **Braccia D**, Jenkins C, Grant MR, Abeysinghe S, Yang Y, Jermain MD, Wu C, Bing Ma B & Jiang X.
-    - <ins>Journal</ins>: Nature Microbiology, 2024, <a href="https://www.nature.com/articles/s41564-023-01549-x" target="_blank">Full text</a>
+1. Case study of resecabtagene autoleucel in a subject with diffuse cutaneous Systemic Sclerosis treated in the RESET-SScTM phase I/II trial.  [[full text]](https://www.cell.com/molecular-therapy-family/advances/fulltext/S3117-387X(25)00013-8)
 
-2. **Gut Microbiome–Wide Search for Bacterial Azoreductases Reveals Uncharacterized Azoreductases in _Fusobacterium nucleatum_, _Bacteroides fragilis_, and _Clostridium clostridioforme_**
-    - <ins>Authors</ins>: **Braccia DJ**, Ndjite GM, Weiss A, Levy S, Abeysinghe S, Jiang X, Pop M, Hall B.
-    - <ins>Journal</ins>: Drug Metabolism and Disposition, 2023, <a href="https://dmd.aspetjournals.org/content/51/1/142.abstract" target="_blank">Full text</a>
+2. Mechanistic basis of the acute safety profile of rese-cel, an autologous CD19-CAR T, in patients with autoimmune disease treated in four ongoing phase 1/2 clinical trials.  [[full text]](https://doi.org/10.1182/blood-2025-2336)
 
-3. **The Capacity to Produce H<sub>2</sub>S via Cysteine Degradation Is Ubiquitous in the Human Gut Microbiome**
-    - <ins>Authors</ins>: **Braccia DJ**, Jiang X, Pop M, Hall AB
-    - <ins>Journal</ins>: Frontiers in Microbiology, 2021, <a href="https://www.frontiersin.org/journals/microbiology/articles/10.3389/fmicb.2021.705583/full" target="_blank">Full text</a>
-
-# Contact
-
-- **Email:** [domenick.braccia@gmail.com](mailto:domenick.braccia@gmail.com)
-- **Linkedin:** <a href="https://www.linkedin.com/in/dombraccia/" target="_blank">Linkedin</a>
-- **Twitter:** <a href="https://twitter.com/dombraccia" target="_blank">Twitter</a>
+3. Orchestrating Microbiome Analysis with Bioconductor.  [[full text]](https://www.biorxiv.org/content/10.1101/2025.10.29.685036v1.abstract)
 
 ---
 
-Last updated on 21.07.2024
+Last updated on 12-May-2026
