@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to setup a bioinformatics analysis workflow in 2024 with VSCode, Quarto, and Mamba | Domenick J. Braccia</title>
+  <meta name="description" content="A comprehensive tutorial on setting up a modern, reliable computational biology workspace using VSCode, Quarto, and Mamba.">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo-container">
+        <a href="../../index.html" class="logo">Domenick J. Braccia</a>
+        <span class="subtitle">Sr. Scientist in Computational Biology</span>
+      </div>
+      <nav>
+        <a href="../../index.html">Home</a>
+        <a href="../../blog.html" class="active">Blog</a>
+        <a href="../../cv.html">CV</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="post-detail">
+        <div class="post-header">
+          <div class="post-meta">
+            <time datetime="2024-07-21">July 21, 2024</time>
+            <span class="post-tag">Bioinformatics</span>
+            <span class="post-tag">Python</span>
+            <span class="post-tag">R</span>
+            <span class="post-tag">Tutorial</span>
+          </div>
+          <h1>How to setup a bioinformatics analysis workflow in 2024 with VSCode, Quarto, and Mamba</h1>
+          <p style="font-family: var(--font-sans); color: var(--text-muted); font-size: 0.95rem;">By Domenick J. Braccia</p>
+        </div>
+
+        <div class="post-body">
+          <h2>Introduction</h2>
+          
+          <p>
+            The bioinformatics and computational biology discipline has seen dramatic growth in the last decade and is projected to continue growing.<a href="#fn1" id="ref1"><sup>1</sup></a> As the field continues to evolve, the software and computational tools do as well, so having a reliable and stable workflow is essential.
+          </p>
+          
+          <p>
+            Everyone has a preferred coding workflow, and no one setup is perfect. That being said, I have found that the combination of <strong>Visual Studio Code</strong> (VSCode) for the IDE, <strong>Quarto</strong> for creating notebooks, and <strong>Mamba</strong> for package management is a dynamic and powerful <strong>bioinformatics workflow in 2024</strong>!
+          </p>
+
+          <h2>Quick Start</h2>
+          
+          <blockquote>
+            <strong>Attention Windows Users</strong>: This tutorial is tailored towards MacOS and Linux OS. For dedicated Windows users, I recommend this <a href="https://medium.com/@larysha.rothmann/getting-started-with-wsl-for-bioinformatics-setting-up-a-fully-functional-and-pretty-53b9c79b5380" target="_blank" rel="noopener noreferrer">blog post</a> by Larysha Rothmann.
+          </blockquote>
+          
+          <ol>
+            <li>
+              Install <a href="https://code.visualstudio.com/download" target="_blank" rel="noopener noreferrer">VSCode</a> and relevant extensions:
+              <ul>
+                <li>R</li>
+                <li>Python</li>
+                <li>Quarto</li>
+              </ul>
+            </li>
+            <li>Install <a href="https://quarto.org/docs/get-started/" target="_blank" rel="noopener noreferrer">Quarto</a> for creating rich text documents.</li>
+            <li>Download <a href="https://github.com/conda-forge/miniforge#Download" target="_blank" rel="noopener noreferrer">miniforge</a> for creating stable and reproducible coding environments.
+<pre><code><span class="token-comment"># Run the following commands in your VSCode terminal. Press: (ctrl + `)</span>
+curl -L -O "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
+bash Miniforge3-$(uname)-$(uname -m).sh</code></pre>
+            </li>
+            <li>Clone the <a href="https://github.com/dombraccia/bioinfo-2024.git" target="_blank" rel="noopener noreferrer">bioinfo-2024</a> repository.
+<pre><code>git clone https://github.com/dombraccia/bioinfo-2024.git
+cd bioinfo-2024</code></pre>
+            </li>
+            <li>Create a stable coding environment with <a href="https://mamba.readthedocs.io/en/latest/user_guide/mamba.html#mamba" target="_blank" rel="noopener noreferrer">mamba</a>.
+<pre><code><span class="token-comment"># In the bioinfo-2024/ directory</span>
+mamba env create -n bioinfo python=3.12 -f environment.yml</code></pre>
+            </li>
+            <li>Render the example Quarto notebook to test your environment setup.
+<pre><code>quarto render bioinfo-2024.qmd --to html</code></pre>
+            </li>
+          </ol>
+          
+          <p>
+            <strong>BONUS</strong>: Convert your Quarto notebook to a Jupyter notebook.
+          </p>
+<pre><code>quarto convert bioinfo-2024.qmd --to ipynb</code></pre>
+
+          <h2>Instructions</h2>
+          
+          <h3>1. Install Visual Studio Code</h3>
+          
+          <p>
+            I use <a href="https://code.visualstudio.com/" target="_blank" rel="noopener noreferrer">VSCode</a> for almost all of my coding tasks. With extensions for Git, Jupyter, Docker, Remote-SSH, and linters for R, Python, Julia, and almost any coding language you can imagine, it is an extremely versatile IDE.<a href="#fn3" id="ref3"><sup>3</sup></a>
+          </p>
+          
+          <p>After you have installed VSCode, install extensions for:</p>
+          <ul>
+            <li>R</li>
+            <li>Python</li>
+            <li>Quarto</li>
+          </ul>
+
+          <p>
+            <img src="preview-image.gif" alt="Installing VSCode extensions">
+          </p>
+
+          <h3>2. Install Quarto</h3>
+          
+          <p>
+            <a href="https://quarto.org/docs/get-started/" target="_blank" rel="noopener noreferrer">Quarto</a> is a document authoring tool that allows you to create rich text documents with code, output, and narrative text. It is a great tool for mixing code, explanations, and any interesting results you find. I mostly choose Quarto over Jupyter notebooks<a href="#fn2" id="ref2"><sup>2</sup></a> for the following reasons:
+          </p>
+          
+          <ul>
+            <li><u>Language agnostic</u>: Quarto allows you to code in multiple languages in the same document. This is highly relevant in bioinformatics where you may need to switch between R and Python regularly for access to different packages.</li>
+            <li><u>Version control</u>: Quarto documents are plain text files, making them easy to version control with Git.</li>
+            <li><u>Customizable output</u>: You can output your document in multiple formats (HTML, PDF, Word, etc.) with a single command.</li>
+            <li><u>Conversion to Jupyter notebooks</u>: Quarto documents can easily be converted to Jupyter notebooks and vice versa, so you are never locked-in to one notebook system.</li>
+          </ul>
+
+          <h3>3. Download Miniforge (<code>mamba</code>)</h3>
+          
+          <p>
+            <a href="https://github.com/conda-forge/miniforge?tab=readme-ov-file#miniforge" target="_blank" rel="noopener noreferrer">Miniforge</a> is a package manager based on <a href="https://docs.conda.io/en/latest/" target="_blank" rel="noopener noreferrer">Conda</a>. It allows you to create isolated coding environments with specific package versions required for your project. I prefer miniforge (<code>mamba</code>) over Anaconda or Miniconda because it is faster and more efficient. And if you're already familiar with conda environments, just replace <code>conda</code> with <code>mamba</code> in your commands and you are good to go!
+          </p>
+          
+          <p>To install Miniforge, run the following commands in your VSCode terminal:</p>
+<pre><code><span class="token-comment"># Run the following commands in your VSCode terminal. Press: (ctrl + `)</span>
+curl -L -O "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
+bash Miniforge3-$(uname)-$(uname -m).sh</code></pre>
+          
+          <p>Alternatively, you can use <code>wget</code> to download the Miniforge installer:</p>
+<pre><code>wget "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
+bash Miniforge3-$(uname)-$(uname -m).sh</code></pre>
+          
+          <p>We will return to this part after step 4, cloning a git repository.</p>
+
+          <h3>4. <code>git clone</code> a repository</h3>
+          
+          <p>
+            We will now work out of a repo set up with a minimal example of a bioinformatics analysis project. This next part requires that you have Git downloaded, so if you don't have it yet, you can download it <a href="https://git-scm.com/downloads" target="_blank" rel="noopener noreferrer">here</a>.
+          </p>
+<pre><code><span class="token-comment"># Run the following commands in your VSCode terminal. Press: (ctrl + `)</span>
+git clone https://github.com/dombraccia/bioinfo-2024.git
+cd bioinfo-2024</code></pre>
+          
+          <p>Now, we can get back to creating a <code>mamba</code> environment.</p>
+
+          <h3>5. Create a <code>mamba</code> environment</h3>
+          
+          <p>
+            Once you have Miniforge installed, and you are in the <code>bioinfo-2024/</code> folder, we can create a new mamba environment. The following code will:
+          </p>
+          
+          <ol>
+            <li>Create a new mamba environment named <code>bioinfo</code></li>
+            <li>Select Python version 3.12</li>
+            <li>Install the packages listed in the <code>environment.yml</code> file</li>
+            <li>Activate the <code>bioinfo</code> environment</li>
+          </ol>
+<pre><code><span class="token-comment"># Run these commands in the VSCode terminal</span>
+mamba create -n bioinfo python=3.12 -f environment.yml
+mamba activate bioinfo</code></pre>
+          
+          <p>Oops! We forgot to add the <code>numpy</code> package to the <code>environment.yml</code> file. Let's add it now:</p>
+<pre><code><span class="token-comment"># Make sure you have the bioinfo environment activated</span>
+mamba install numpy</code></pre>
+          
+          <p>
+            You can always add packages to an active mamba environment with <code>mamba install</code>. Learn more about customizing yml files <a href="https://mamba.readthedocs.io/en/latest/user_guide/mamba.html#yml-files" target="_blank" rel="noopener noreferrer">here</a>.
+          </p>
+
+          <h3>6. Render a Quarto document</h3>
+          
+          <p>To test your environment setup, render the <code>bioinfo-2024.qmd</code> notebook:</p>
+<pre><code><span class="token-comment"># In the bioinfo-2024/ directory</span>
+quarto render bioinfo-2024.qmd --to html</code></pre>
+          
+          <p>
+            This command will render the Quarto document to HTML by default, but it also supports PDF, Word, and other formats.
+          </p>
+          
+          <p>But by far my favorite feature of the quarto cli, is the <code>quarto convert</code> command:</p>
+<pre><code><span class="token-comment"># Convert qmd &lt;==&gt; ipynb by default, or specify the output format (pdf, html, ...)</span>
+quarto convert bioinfo-2024.qmd --to ipynb
+quarto convert bioinfo-2024.ipynb --to qmd</code></pre>
+          
+          <p>
+            <code>quarto convert</code> automatically converts qmd &lt;==&gt; ipynb. I use this feature quite often when collaborating with others who prefer Jupyter notebooks.
+          </p>
+
+          <h2>Conclusion</h2>
+          
+          <p>
+            Hopefully this tutorial helped set up a local bioinformatics workflow with VSCode, Quarto, and Mamba. If you have any questions or notice any errors, do reach out to me at domenick [at] dbraccia [dot] com. Happy coding!
+          </p>
+          
+          <hr style="margin-top: 3rem; border: none; border-top: 1px solid var(--border-color);">
+          
+          <!-- Footnotes section -->
+          <div class="footnotes" style="margin-top: 2rem; font-size: 0.95rem; color: var(--text-muted);">
+            <div id="fn1">
+              <p>1. <a href="https://www.grandviewresearch.com/industry-analysis/bioinformatics-industry" target="_blank" rel="noopener noreferrer">Bioinformatics Market Size, Share & Trends Analysis Report</a> <a href="#ref1">&crarr;</a></p>
+            </div>
+            <div id="fn2" style="margin-top: 0.5rem;">
+              <p>2. The one instance in which I still use Jupyter notebooks/Jupyter Lab over Quarto is when I need my notebook environment to stay running for a long time. This can happen when processing large single cell datasets and running compute-heavy ML models that can sometimes take days to train. <a href="#ref2">&crarr;</a></p>
+            </div>
+            <div id="fn3" style="margin-top: 0.5rem;">
+              <p>3. Alternatives to VSCode include: <a href="https://www.rstudio.com/products/rstudio/download/" target="_blank" rel="noopener noreferrer">Rstudio</a>, <a href="https://jupyter.org/install" target="_blank" rel="noopener noreferrer">Jupyter Lab</a>, and <a href="https://www.jetbrains.com/pycharm/download/" target="_blank" rel="noopener noreferrer">PyCharm</a>. Ultimately, your choice of IDE essentially comes down to personal preference, so don't spend too much time thinking about it. <a href="#ref3">&crarr;</a></p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="post-footer">
+          <a href="../../blog.html">&larr; Back to Blog</a>
+        </div>
+      </article>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 Domenick J. Braccia. All rights reserved.</p>
+    </footer>
+  </div>
+</body>
+</html>
