@@ -1,0 +1,19 @@
+{
+    "name": "Number Flash",
+    "short_name": "NumFlash",
+    "description": "Learn numbers in French and Italian with flashcards",
+    "start_url": "./",
+    "scope": "./",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#0a0a1a",
+    "theme_color": "#0a0a1a",
+    "icons": [
+        {
+            "src": "icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        }
+    ]
+}

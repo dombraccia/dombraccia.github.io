@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="description" content="Learn numbers in French and Italian with flashcards. Works offline.">
+    <meta name="theme-color" content="#0a0a1a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="NumFlash">
+    <title>Number Flash</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-512.png">
+    <link rel="icon" type="image/png" href="icon-512.png">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app" class="hidden">
+        <!-- Home View -->
+        <section id="home-view" class="view">
+            <header class="home-header">
+                <button id="theme-toggle-btn" class="icon-btn" aria-label="Toggle Theme">🌙</button>
+                <h1>Number Flash</h1>
+                <button id="settings-btn" class="icon-btn" aria-label="Settings">⚙️</button>
+            </header>
+            <div class="setup-group">
+                <label for="language-select">Target Language</label>
+                <select id="language-select">
+                    <option value="fr-FR">French</option>
+                    <option value="it-IT">Italian</option>
+                </select>
+            </div>
+            <div class="setup-group">
+                <label>Number Range (0 - 200)</label>
+                <div class="range-inputs">
+                    <input type="number" id="range-min" min="0" max="200" value="0" placeholder="Min">
+                    <span class="range-separator">to</span>
+                    <input type="number" id="range-max" min="0" max="200" value="20" placeholder="Max">
+                </div>
+            </div>
+            <div class="setup-row">
+                <div class="setup-group flex-1">
+                    <label for="reviews-count">Number of Reviews</label>
+                    <input type="number" id="reviews-count" min="1" max="200" value="20">
+                </div>
+                <div class="setup-group">
+                    <label for="card-order-btn">Card Order</label>
+                    <button id="card-order-btn" class="toggle-btn" type="button">Random: ON</button>
+                </div>
+            </div>
+            <div class="actions">
+                <button id="start-btn" class="primary">Start Session</button>
+                <button id="stats-btn" class="secondary">View Stats</button>
+            </div>
+            <footer class="home-footer">
+                <button id="info-btn" class="footer-link" type="button">ℹ️ About Number Flash</button>
+            </footer>
+        </section>
+
+        <!-- Session View -->
+        <section id="session-view" class="view hidden">
+            <div class="session-header">
+                <button id="exit-btn" class="exit-link">✕ Exit</button>
+                <div id="session-progress" class="session-progress"></div>
+                <button id="undo-btn" class="undo-link hidden">Undo</button>
+            </div>
+            <div id="countdown" class="overlay hidden">3</div>
+            <div id="card-container">
+                <div id="flashcard">
+                    <div class="card-face front"></div>
+                    <div class="card-face back"></div>
+                </div>
+            </div>
+            <div id="session-controls" class="hidden">
+                <button id="incorrect-btn" class="btn-x">✕</button>
+                <button id="correct-btn" class="btn-check">✓</button>
+            </div>
+        </section>
+
+        <!-- Summary View -->
+        <section id="summary-view" class="view hidden">
+            <h2 id="summary-title">Session Complete</h2>
+            <div id="summary-stats">
+                <div class="summary-card">
+                    <span class="summary-label">Time</span>
+                    <span class="summary-value"><span id="summary-time">0</span>s</span>
+                </div>
+                <div class="summary-card">
+                    <span class="summary-label">Accuracy</span>
+                    <span class="summary-value"><span id="summary-accuracy">0</span>%</span>
+                </div>
+                <div class="summary-card">
+                    <span class="summary-label">Avg Flip</span>
+                    <span class="summary-value"><span id="summary-avg-time">0</span>s</span>
+                </div>
+            </div>
+
+            <div id="summary-results" class="summary-results-container hidden">
+                <h3>Session Review (by difficulty)</h3>
+                <div id="summary-results-list" class="stats-list"></div>
+            </div>
+
+            <div class="actions">
+                <button id="retrain-btn" class="primary hidden">Retrain Weak Cards</button>
+                <button id="finish-btn" class="secondary">Back to Home</button>
+            </div>
+        </section>
+
+        <!-- Stats View -->
+        <section id="stats-view" class="view hidden">
+            <header>
+                <button id="stats-back-btn" class="back-link">← Back</button>
+                <h2>My Progress</h2>
+            </header>
+            
+            <!-- Category Selector Block -->
+            <div id="stats-filter-container" class="stats-filter-card">
+                <span class="filter-title">Select categories to review:</span>
+                <div class="checkbox-group">
+                    <label class="custom-checkbox difficult">
+                        <input type="checkbox" id="filter-difficult">
+                        <span class="checkbox-pill">Difficult</span>
+                    </label>
+                    <label class="custom-checkbox needs-improvement">
+                        <input type="checkbox" id="filter-needs-work">
+                        <span class="checkbox-pill">Needs Work</span>
+                    </label>
+                    <label class="custom-checkbox getting-there">
+                        <input type="checkbox" id="filter-getting-there">
+                        <span class="checkbox-pill">Getting There</span>
+                    </label>
+                    <label class="custom-checkbox learned">
+                        <input type="checkbox" id="filter-learned">
+                        <span class="checkbox-pill">Learned</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button id="stats-review-btn" class="primary hidden">Review Selected (0)</button>
+            </div>
+
+            <div id="stats-list" class="stats-list"></div>
+        </section>
+
+        <!-- Settings Modal -->
+        <div id="settings-modal" class="modal hidden">
+            <div class="modal-content">
+                <header class="modal-header">
+                    <h2>Settings</h2>
+                    <button id="settings-close-btn" class="close-btn" aria-label="Close Settings">✕</button>
+                </header>
+                <div class="settings-list">
+                    <div class="settings-item">
+                        <div class="settings-info">
+                            <span class="settings-title">Refresh App</span>
+                            <span class="settings-desc">Checks for updates and reloads the app</span>
+                        </div>
+                        <button id="refresh-app-btn" class="update-btn" type="button">Refresh</button>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-info">
+                            <span class="settings-title">Dark Mode</span>
+                            <span class="settings-desc">Enable standard dark theme styling</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="setting-dark-mode" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-info">
+                            <span class="settings-title">Show Percentage</span>
+                            <span class="settings-desc">Display accuracy next to category</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="setting-show-percent">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-info">
+                            <span class="settings-title">Show Average Time</span>
+                            <span class="settings-desc">Display response time next to category</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="setting-show-avg-time">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-info">
+                            <span class="settings-title">Read Aloud</span>
+                            <span class="settings-desc">Pronounce translation automatically on flip</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="setting-read-aloud" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-info">
+                            <span class="settings-title">Clear Storage</span>
+                            <span class="settings-desc">Deletes all offline statistics and settings</span>
+                        </div>
+                        <button id="clear-cache-btn" class="delete-btn" type="button">Clear Data</button>
+                    </div>
+                </div>
+                <div id="settings-version" class="settings-version">Version --</div>
+            </div>
+        </div>
+
+        <!-- Info Modal -->
+        <div id="info-modal" class="modal hidden">
+            <div class="modal-content">
+                <header class="modal-header">
+                    <h2>About Number Flash</h2>
+                    <button id="info-close-btn" class="close-btn" aria-label="Close Info">✕</button>
+                </header>
+                    <p>I’ve always loved learning new languages, but no matter how close to fluent I get, mastering numbers has always been a struggle. Whether listening to phone numbers or counting change, there's always a split-second delay while my brain translates the digits.</p>
+                    <p>I built <strong>Number Flash</strong> to solve this exact bottleneck. It’s designed to train rapid-fire recall, pairing visual numbers with their correct native pronunciation so you can understand them instantly without translating them in your head first.</p>
+                    <p>Because your progress is stored entirely on your device, you can practice anywhere—even completely offline.</p>
+                    <div class="info-footer-section">
+                        <p class="info-footer-text">If you find any bugs or have suggestions for improving the app, please submit them here:</p>
+                        <a href="https://github.com/dombraccia/number_flash/issues" target="_blank" rel="noopener" class="issue-link">github.com/dombraccia/number_flash/issues</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js" type="module"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
+</body>
+</html>
