@@ -515,11 +515,16 @@ footer {
 /* ==========================================================================
    CV PAGE
    ========================================================================== */
+/* ==========================================================================
+   CV PAGE (HTML Layout)
+   ========================================================================== */
 .cv-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
+  border-bottom: 2px solid var(--primary-color);
+  padding-bottom: 1rem;
 }
 
 @media (max-width: 640px) {
@@ -551,20 +556,189 @@ footer {
   text-decoration: none;
 }
 
-.cv-viewer-container {
-  position: relative;
-  width: 100%;
-  height: 800px;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+.cv-html-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  font-size: 1rem;
 }
 
-.cv-iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
+.cv-contact-info {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  background-color: var(--code-bg);
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.cv-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.cv-section-title {
+  font-family: var(--font-sans);
+  font-size: 1.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--primary-color);
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 0.3rem;
+  margin-bottom: 1.25rem;
+  font-weight: 600;
+}
+
+.cv-item {
+  margin-bottom: 1.5rem;
+}
+
+.cv-item:last-child {
+  margin-bottom: 0;
+}
+
+.cv-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.35rem;
+}
+
+@media (max-width: 640px) {
+  .cv-item-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.1rem;
+  }
+}
+
+.cv-item-title {
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.cv-item-org {
+  font-style: italic;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.cv-item-date {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.cv-bullets {
+  padding-left: 1.25rem;
+  margin-bottom: 0;
+  font-size: 0.95rem;
+}
+
+.cv-bullets li {
+  margin-bottom: 0.35rem;
+}
+
+.cv-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .cv-grid-2 {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+.skills-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.skills-category {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.skills-cat-name {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.skills-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.skill-tag {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  background-color: var(--code-bg);
+  border: 1px solid var(--border-color);
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  color: var(--text-main);
+}
+
+.pub-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  font-size: 0.95rem;
+}
+
+.pub-item {
+  line-height: 1.6;
+}
+
+.pub-title {
+  font-weight: 500;
+}
+
+.pub-authors {
+  color: var(--text-main);
+}
+
+.pub-journal {
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+.pub-year {
+  font-weight: 500;
+}
+
+.award-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
+
+.award-name {
+  font-weight: 500;
+}
+
+.award-date {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: var(--text-muted);
 }
 
 /* ==========================================================================
