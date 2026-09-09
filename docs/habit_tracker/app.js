@@ -12,23 +12,40 @@ const DataManager = {
     saveData(data) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     },
-    addHabit(name) {
+    addHabit(name, type, target) {
         const data = this.getData();
         const newHabit = {
             id: Date.now().toString(),
             name: name,
+            targetType: type, // "at_least" or "at_most"
+            targetValue: parseInt(target, 10),
             created: new Date().toISOString(),
-            tracking: {}
+            tracking: {} // Format: "YYYY-MM-DD": numeric_value
         };
         data.habits.push(newHabit);
         this.saveData(data);
         return newHabit;
     },
-    trackDay(habitId, dateStr, isCompleted) {
+    updateHabit(id, name, type, target) {
+        const data = this.getData();
+        const habit = data.habits.find(h => h.id === id);
+        if (habit) {
+            habit.name = name;
+            habit.targetType = type;
+            habit.targetValue = parseInt(target, 10);
+            this.saveData(data);
+        }
+    },
+    deleteHabit(id) {
+        const data = this.getData();
+        data.habits = data.habits.filter(h => h.id !== id);
+        this.saveData(data);
+    },
+    trackDay(habitId, dateStr, value) {
         const data = this.getData();
         const habit = data.habits.find(h => h.id === habitId);
         if (habit) {
-            habit.tracking[dateStr] = isCompleted;
+            habit.tracking[dateStr] = parseInt(value, 10);
             this.saveData(data);
         }
     },
@@ -43,35 +60,50 @@ const Utils = {
         const d = new Date();
         return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
     },
-    calculateStreak(habit) {
-        if (!habit || !habit.tracking) return { years: 0, months: 0, days: 0 };
-        const dates = Object.keys(habit.tracking)
-            .filter(d => habit.tracking[d] === true)
-            .sort((a, b) => new Date(b) - new Date(a));
-        
-        if (dates.length === 0) return { years: 0, months: 0, days: 0 };
-
-        let currentStreak = 0;
-        let today = new Date(this.getTodayStr());
-        
-        let firstDateToCheck = new Date(dates[0]);
-        let diffTime = Math.abs(today - firstDateToCheck);
-        let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        
-        if (diffDays > 1) {
-            return { years: 0, months: 0, days: 0, total: 0 }; 
+    getPastDates(daysCount) {
+        const dates = [];
+        const today = new Date();
+        for (let i = daysCount - 1; i >= 0; i--) {
+            const d = new Date(today);
+            d.setDate(today.getDate() - i);
+            dates.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`);
         }
+        return dates;
+    },
+    isDaySuccessful(habit, dateStr) {
+        // If unlogged, default to 0
+        const val = habit.tracking[dateStr] !== undefined ? habit.tracking[dateStr] : 0;
+        if (habit.targetType === 'at_least') {
+            return val >= habit.targetValue;
+        } else {
+            // at_most (e.g. reduce alcohol to 0)
+            return val <= habit.targetValue;
+        }
+    },
+    calculateStreak(habit) {
+        if (!habit) return { years: 0, months: 0, days: 0, total: 0 };
+        
+        // Find all days tracked. Wait, for "at_most", unlogged days are successful!
+        // So a streak is from the start of the habit to today.
+        // We iterate backwards from today.
+        let currentStreak = 0;
+        let d = new Date(this.getTodayStr());
+        const createdDate = new Date(habit.created.split('T')[0]);
 
-        let lastDate = new Date(dates[0]);
-        currentStreak = 1;
-
-        for (let i = 1; i < dates.length; i++) {
-            let d = new Date(dates[i]);
-            let diff = Math.round((lastDate - d) / (1000 * 60 * 60 * 24));
-            if (diff === 1) {
+        // Limit the loop to avoid infinite loops, max check is when habit was created
+        // Or if it's a good habit, an unlogged day breaks it.
+        while (d >= createdDate) {
+            const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+            
+            if (this.isDaySuccessful(habit, dateStr)) {
                 currentStreak++;
-                lastDate = d;
+                d.setDate(d.getDate() - 1);
             } else {
+                // If checking today and it's failed, streak is 0.
+                // If checking yesterday and it failed, streak is just today (if today was success).
+                // Wait, if today is not logged, but yesterday was failed, streak is 0.
+                // Actually, if today is failed, break. If yesterday is failed, break.
+                // So streak just stops here.
                 break;
             }
         }
@@ -94,6 +126,8 @@ const Utils = {
 // --- UI Management ---
 const App = {
     currentHabitIndex: 0,
+    editingHabitId: null,
+    currentLogValue: 0,
     
     init() {
         this.cacheDOM();
@@ -102,57 +136,132 @@ const App = {
     },
     
     cacheDOM() {
+        // Views
         this.mainView = document.getElementById('main-view');
         this.createView = document.getElementById('create-view');
+        this.logView = document.getElementById('log-view');
+        this.statsView = document.getElementById('stats-view');
         this.settingsView = document.getElementById('settings-view');
+        
+        // Main View elements
         this.cardContainer = document.getElementById('card-container');
         this.sessionControls = document.getElementById('session-controls');
-        
         this.btnSettings = document.getElementById('btn-settings');
+        this.btnPrev = document.getElementById('btn-prev');
+        this.btnNext = document.getElementById('btn-next');
+        this.btnStats = document.getElementById('btn-stats');
+        this.btnEdit = document.getElementById('btn-edit');
+
+        // Create/Edit elements
         this.btnBackCreate = document.getElementById('btn-back-create');
-        this.btnBackSettings = document.getElementById('btn-back-settings');
-        
+        this.createTitle = document.getElementById('create-title');
         this.habitNameInput = document.getElementById('habit-name');
+        this.habitTypeSelect = document.getElementById('habit-type');
+        this.habitTargetInput = document.getElementById('habit-target');
         this.btnSaveHabit = document.getElementById('btn-save-habit');
+        this.btnDeleteHabit = document.getElementById('btn-delete-habit');
         
-        this.btnYes = document.getElementById('btn-yes');
-        this.btnNo = document.getElementById('btn-no');
+        // Log elements
+        this.btnBackLog = document.getElementById('btn-back-log');
+        this.logHabitName = document.getElementById('log-habit-name');
+        this.logValueDisplay = document.getElementById('log-value');
+        this.btnLogMinus = document.getElementById('btn-log-minus');
+        this.btnLogPlus = document.getElementById('btn-log-plus');
+        this.btnSaveLog = document.getElementById('btn-save-log');
         
+        // Stats elements
+        this.btnBackStats = document.getElementById('btn-back-stats');
+        this.statsHabitName = document.getElementById('stats-habit-name');
+        this.statsCalendarContainer = document.getElementById('stats-calendar-container');
+        this.statsGraphContainer = document.getElementById('stats-graph-container');
+
+        // Settings elements
+        this.btnBackSettings = document.getElementById('btn-back-settings');
         this.btnExport = document.getElementById('btn-export');
         this.btnImportTrigger = document.getElementById('btn-import-trigger');
         this.fileImport = document.getElementById('file-import');
-
-        this.btnPrev = document.getElementById('btn-prev');
-        this.btnNext = document.getElementById('btn-next');
     },
     
     bindEvents() {
+        // Main view nav
         this.btnSettings.addEventListener('click', () => this.switchView(this.settingsView));
+        this.btnPrev.addEventListener('click', () => this.navigate(-1));
+        this.btnNext.addEventListener('click', () => this.navigate(1));
+
+        // Stats & Edit
+        this.btnStats.addEventListener('click', () => this.openStatsView());
+        this.btnEdit.addEventListener('click', () => this.openEditView());
+
+        // Create/Edit View
         this.btnBackCreate.addEventListener('click', () => {
-            // When going back, make sure we stay at the end if we were creating
-            const maxIndex = DataManager.getData().habits.length;
-            if(this.currentHabitIndex > maxIndex) {
-                this.currentHabitIndex = maxIndex;
+            if (this.editingHabitId === null) {
+                // If cancelling creation, make sure we go back correctly
+                const maxIndex = DataManager.getData().habits.length;
+                if(this.currentHabitIndex > maxIndex) {
+                    this.currentHabitIndex = maxIndex;
+                }
             }
             this.switchView(this.mainView);
             this.renderMainView();
         });
-        this.btnBackSettings.addEventListener('click', () => this.switchView(this.mainView));
         
         this.btnSaveHabit.addEventListener('click', () => {
             const name = this.habitNameInput.value.trim();
+            const type = this.habitTypeSelect.value;
+            const target = this.habitTargetInput.value;
+            
             if (name) {
-                DataManager.addHabit(name);
-                this.habitNameInput.value = '';
-                this.currentHabitIndex = DataManager.getData().habits.length - 1;
+                if (this.editingHabitId) {
+                    DataManager.updateHabit(this.editingHabitId, name, type, target);
+                } else {
+                    DataManager.addHabit(name, type, target);
+                    this.currentHabitIndex = DataManager.getData().habits.length - 1;
+                }
                 this.switchView(this.mainView);
                 this.renderMainView();
             }
         });
 
-        this.btnYes.addEventListener('click', () => this.trackToday(true));
-        this.btnNo.addEventListener('click', () => this.trackToday(false));
+        this.btnDeleteHabit.addEventListener('click', () => {
+            if (this.editingHabitId && confirm("Are you sure you want to delete this habit?")) {
+                DataManager.deleteHabit(this.editingHabitId);
+                this.currentHabitIndex = Math.max(0, this.currentHabitIndex - 1);
+                this.switchView(this.mainView);
+                this.renderMainView();
+            }
+        });
         
+        // Log View
+        this.btnBackLog.addEventListener('click', () => {
+            this.switchView(this.mainView);
+            this.renderMainView();
+        });
+
+        this.btnLogMinus.addEventListener('click', () => {
+            this.currentLogValue = Math.max(0, this.currentLogValue - 1);
+            this.logValueDisplay.innerText = this.currentLogValue;
+        });
+
+        this.btnLogPlus.addEventListener('click', () => {
+            this.currentLogValue++;
+            this.logValueDisplay.innerText = this.currentLogValue;
+        });
+
+        this.btnSaveLog.addEventListener('click', () => {
+            const habits = DataManager.getData().habits;
+            if (habits.length > 0 && this.currentHabitIndex < habits.length) {
+                const currentHabit = habits[this.currentHabitIndex];
+                DataManager.trackDay(currentHabit.id, Utils.getTodayStr(), this.currentLogValue);
+                this.switchView(this.mainView);
+                this.renderMainView();
+            }
+        });
+
+        // Stats View
+        this.btnBackStats.addEventListener('click', () => this.switchView(this.mainView));
+
+        // Settings
+        this.btnBackSettings.addEventListener('click', () => this.switchView(this.mainView));
         this.btnExport.addEventListener('click', () => {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(DataManager.getData()));
             const downloadAnchorNode = document.createElement('a');
@@ -185,9 +294,6 @@ const App = {
             }
         });
 
-        this.btnPrev.addEventListener('click', () => this.navigate(-1));
-        this.btnNext.addEventListener('click', () => this.navigate(1));
-
         // Swipe handling
         let touchstartX = 0;
         let touchendX = 0;
@@ -202,9 +308,7 @@ const App = {
 
     navigate(dir) {
         const habits = DataManager.getData().habits;
-        // max index is habits.length (the "Start new habit" card)
         const maxIndex = habits.length;
-        
         let newIndex = this.currentHabitIndex + dir;
         if (newIndex >= 0 && newIndex <= maxIndex) {
             this.currentHabitIndex = newIndex;
@@ -214,26 +318,72 @@ const App = {
 
     handleSwipe() {
         const threshold = 50;
-        if (touchendX < touchstartX - threshold) {
-            this.navigate(1); // swipe left = next
-        }
-        if (touchendX > touchstartX + threshold) {
-            this.navigate(-1); // swipe right = prev
-        }
+        if (touchendX < touchstartX - threshold) this.navigate(1); // swipe left = next
+        if (touchendX > touchstartX + threshold) this.navigate(-1); // swipe right = prev
     },
 
     switchView(view) {
-        [this.mainView, this.createView, this.settingsView].forEach(v => v.classList.add('hidden'));
+        [this.mainView, this.createView, this.logView, this.statsView, this.settingsView].forEach(v => v.classList.add('hidden'));
         view.classList.remove('hidden');
     },
 
-    trackToday(isCompleted) {
+    openCreateView() {
+        this.editingHabitId = null;
+        this.createTitle.innerText = "Create New Habit";
+        this.habitNameInput.value = '';
+        this.habitTypeSelect.value = 'at_least';
+        this.habitTargetInput.value = '1';
+        this.btnDeleteHabit.classList.add('hidden');
+        this.switchView(this.createView);
+    },
+
+    openEditView() {
         const habits = DataManager.getData().habits;
-        if (habits.length > 0 && this.currentHabitIndex < habits.length) {
-            const currentHabit = habits[this.currentHabitIndex];
-            DataManager.trackDay(currentHabit.id, Utils.getTodayStr(), isCompleted);
-            this.renderMainView(); 
+        if (this.currentHabitIndex >= habits.length) return;
+        
+        const habit = habits[this.currentHabitIndex];
+        this.editingHabitId = habit.id;
+        
+        this.createTitle.innerText = "Edit Habit";
+        this.habitNameInput.value = habit.name;
+        this.habitTypeSelect.value = habit.targetType;
+        this.habitTargetInput.value = habit.targetValue;
+        this.btnDeleteHabit.classList.remove('hidden');
+        
+        this.switchView(this.createView);
+    },
+
+    openLogView() {
+        const habits = DataManager.getData().habits;
+        if (this.currentHabitIndex >= habits.length) return;
+        
+        const habit = habits[this.currentHabitIndex];
+        this.logHabitName.innerText = habit.name;
+        
+        const todayStr = Utils.getTodayStr();
+        const existingVal = habit.tracking[todayStr];
+        
+        if (existingVal !== undefined) {
+            this.currentLogValue = existingVal;
+        } else {
+            this.currentLogValue = 0;
         }
+        
+        this.logValueDisplay.innerText = this.currentLogValue;
+        this.switchView(this.logView);
+    },
+
+    openStatsView() {
+        const habits = DataManager.getData().habits;
+        if (this.currentHabitIndex >= habits.length) return;
+        
+        const habit = habits[this.currentHabitIndex];
+        this.statsHabitName.innerText = habit.name;
+        
+        this.statsCalendarContainer.innerHTML = this.renderCalendar(habit);
+        this.statsGraphContainer.innerHTML = this.renderGraph(habit);
+        
+        this.switchView(this.statsView);
     },
 
     renderCalendar(habit) {
@@ -252,11 +402,20 @@ const App = {
             html += `<div class="cal-cell empty"></div>`;
         }
 
+        const createdDate = new Date(habit.created.split('T')[0]);
+
         for (let day = 1; day <= daysInMonth; day++) {
             const dStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
             let classes = ['cal-cell'];
-            if (habit && habit.tracking && habit.tracking[dStr] === true) classes.push('cal-done');
-            else if (habit && habit.tracking && habit.tracking[dStr] === false) classes.push('cal-missed');
+            
+            const cellDate = new Date(dStr);
+            if (cellDate >= createdDate && cellDate <= new Date(todayStr)) {
+                if (Utils.isDaySuccessful(habit, dStr)) {
+                    classes.push('cal-done');
+                } else {
+                    classes.push('cal-missed');
+                }
+            }
             if (dStr === todayStr) classes.push('cal-today');
 
             html += `<div class="${classes.join(' ')}">${day}</div>`;
@@ -265,11 +424,43 @@ const App = {
         return html;
     },
 
+    renderGraph(habit) {
+        const daysCount = 30;
+        const pastDates = Utils.getPastDates(daysCount); // from oldest to newest
+        
+        const values = pastDates.map(dateStr => {
+            return habit.tracking[dateStr] !== undefined ? habit.tracking[dateStr] : 0;
+        });
+
+        const maxVal = Math.max(...values, habit.targetValue, 1); // min scale of 1
+        
+        // SVG coordinates: 0,0 is top-left
+        let points = "";
+        const w = 100; // Percentage based width for viewBox
+        const h = 100;
+        
+        for(let i=0; i<values.length; i++) {
+            const x = (i / (daysCount - 1)) * w;
+            const y = h - ((values[i] / maxVal) * h);
+            points += `${x},${y} `;
+        }
+
+        return `
+            <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="width: 100%; height: 100%; overflow: visible;">
+                <polyline points="${points}" fill="none" stroke="var(--accent-1)" stroke-width="2" />
+                <!-- Optional: Target line -->
+                <line x1="0" y1="${h - ((habit.targetValue / maxVal) * h)}" x2="100" y2="${h - ((habit.targetValue / maxVal) * h)}" stroke="var(--text-tertiary)" stroke-width="1" stroke-dasharray="2,2" />
+            </svg>
+            <div style="position: absolute; top: -10px; left: -25px; font-size: 10px; color: var(--text-secondary);">${maxVal}</div>
+            <div style="position: absolute; bottom: -5px; left: -15px; font-size: 10px; color: var(--text-secondary);">0</div>
+        `;
+    },
+
     renderMainView() {
         const data = DataManager.getData();
         this.cardContainer.innerHTML = '';
         
-        const maxIndex = data.habits.length; // max index is the empty state card
+        const maxIndex = data.habits.length;
 
         if (this.currentHabitIndex > maxIndex) {
             this.currentHabitIndex = maxIndex;
@@ -289,54 +480,50 @@ const App = {
         }
         
         if (this.currentHabitIndex === maxIndex) {
-            // Render "Start a new habit" card
             this.sessionControls.classList.add('invisible');
+            this.sessionControls.style.display = 'none'; // fully remove layout space to not push card? No wait, user wanted it not to shift. We'll use invisible to keep it taking up space.
+            this.sessionControls.style.display = 'flex';
+            
             const card = document.createElement('div');
             card.className = 'habit-card empty-habit';
             card.innerHTML = `
                 <div>Start a new habit</div>
                 <div style="font-size: 48px; margin-top: 10px;">+</div>
             `;
-            card.addEventListener('click', () => {
-                this.habitNameInput.value = ''; // clear previous input
-                this.switchView(this.createView);
-            });
+            card.addEventListener('click', () => this.openCreateView());
             this.cardContainer.appendChild(card);
             return;
         }
 
-        // Render actual habit card
         const habit = data.habits[this.currentHabitIndex];
         const streak = Utils.calculateStreak(habit);
         const todayStr = Utils.getTodayStr();
         const todayTracked = habit.tracking[todayStr] !== undefined;
 
-        let streakText = '';
-        if (streak.years > 0) streakText += `${streak.years}y `;
-        if (streak.months > 0) streakText += `${streak.months}m `;
-        streakText += `${streak.days}d`;
-        if(streak.total === 0) streakText = "0 days";
+        let streakParts = [];
+        if (streak.years > 0) streakParts.push(`${streak.years} years`);
+        if (streak.months > 0) streakParts.push(`${streak.months} months`);
+        if (streak.days > 0 || streak.total === 0) streakParts.push(`${streak.days} days`);
+        let streakText = streakParts.join(', ');
 
         const card = document.createElement('div');
         card.className = 'habit-card';
+        card.style.cursor = 'pointer';
         card.innerHTML = `
             <div class="habit-title">${habit.name}</div>
-            <div class="habit-streak">Streak: ${streakText}</div>
-            <div class="habit-calendar">${this.renderCalendar(habit)}</div>
+            <div class="habit-streak" style="font-size: 20px;">${streakText}</div>
+            ${todayTracked ? `<div style="margin-top: 20px; font-size: 14px; color: var(--success);">Logged today: ${habit.tracking[todayStr]}</div>` : `<div style="margin-top: 20px; font-size: 14px; color: var(--text-tertiary);">Tap to log today</div>`}
         `;
+        card.addEventListener('click', () => this.openLogView());
         this.cardContainer.appendChild(card);
 
         this.sessionControls.classList.remove('invisible');
-        
-        // Highlight active button if already tracked today
-        this.btnYes.style.opacity = (todayTracked && habit.tracking[todayStr] === true) ? '1' : (todayTracked ? '0.3' : '1');
-        this.btnNo.style.opacity = (todayTracked && habit.tracking[todayStr] === false) ? '1' : (todayTracked ? '0.3' : '1');
+        this.sessionControls.style.display = 'flex';
     }
 };
 
 document.addEventListener('DOMContentLoaded', () => App.init());
 
-// Service Worker Registration
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js').catch(err => {
