@@ -28,8 +28,10 @@
 
     /* Semantic colors */
     --success: #34d399;
+    --on-success: #000000;
     --success-bg: rgba(52, 211, 153, 0.10);
     --error: #f87171;
+    --on-error: #000000;
     --error-bg: rgba(248, 113, 113, 0.10);
     --warning: #fbbf24;
     --warning-bg: rgba(251, 191, 36, 0.10);
@@ -146,6 +148,27 @@ h1, h2, h3, p, span, label, select, input, a,
     pointer-events: none;
 }
 
+.scroll-view {
+    justify-content: flex-start !important;
+    overflow-y: auto;
+    max-height: 90vh;
+    width: 100%;
+    padding: 10px 5vw;
+}
+.scroll-view::-webkit-scrollbar { display: none; }
+.scroll-view { -ms-overflow-style: none; scrollbar-width: none; }
+
+.auto-card {
+    height: auto !important;
+    aspect-ratio: auto !important;
+    width: 100% !important;
+    max-width: 400px !important;
+    margin: 0 auto 16px auto;
+    position: relative;
+    padding: 20px !important;
+    overflow-y: visible !important;
+}
+
 /* ---- Views ---- */
 
 .view {
@@ -190,7 +213,9 @@ h2 {
     padding-left: 4px;
 }
 
-input[type="number"] {
+input[type="number"],
+input[type="text"],
+input[type="date"] {
     appearance: none;
     -moz-appearance: textfield;
     padding: 14px 16px;
@@ -211,7 +236,9 @@ input[type="number"]::-webkit-inner-spin-button {
     margin: 0;
 }
 
-input[type="number"]:focus {
+input[type="number"]:focus,
+input[type="text"]:focus,
+input[type="date"]:focus {
     outline: none;
     border-color: var(--accent-1);
     box-shadow: 0 0 0 3px var(--accent-glow);
@@ -786,6 +813,11 @@ body.light-theme {
     --accent-1: #4f46e5;
     --accent-2: #7c3aed;
     --accent-glow: rgba(79, 70, 229, 0.15);
+
+    --success: #059669;
+    --on-success: #ffffff;
+    --error: #dc2626;
+    --on-error: #ffffff;
 }
 
 /* Home Header & Gear Button */
@@ -1315,8 +1347,8 @@ input:checked + .slider::before {
     border: 1px solid var(--border-light);
     border-radius: var(--r-lg);
     padding: 24px;
-    width: 420px;
-    max-width: 90vw;
+    width: 340px;
+    max-width: calc(100vw - 120px);
     aspect-ratio: 3 / 2;
     max-height: 70vh; /* Prevent overflowing off screen on small phones */
     backdrop-filter: blur(20px);
@@ -1386,13 +1418,13 @@ input:checked + .slider::before {
 
 .cal-done {
     background: var(--success);
-    color: #000;
+    color: var(--on-success);
     font-weight: bold;
 }
 
 .cal-missed {
     background: var(--error);
-    color: #000;
+    color: var(--on-error);
     font-weight: bold;
 }
 

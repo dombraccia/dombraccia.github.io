@@ -137,6 +137,16 @@ const App = {
     init() {
         this.cacheDOM();
         this.bindEvents();
+        
+        // Load Theme
+        const savedTheme = localStorage.getItem('habit_tracker_theme');
+        if (savedTheme === 'light') {
+            document.body.classList.add('light-theme');
+            this.updateThemeIcon(true);
+        } else {
+            this.updateThemeIcon(false);
+        }
+
         this.renderMainView();
     },
     
@@ -152,6 +162,8 @@ const App = {
         this.cardContainer = document.getElementById('card-container');
         this.sessionControls = document.getElementById('session-controls');
         this.btnSettings = document.getElementById('btn-settings');
+        this.btnThemeToggle = document.getElementById('btn-theme-toggle');
+        this.themeIcon = document.getElementById('theme-icon');
         this.btnPrev = document.getElementById('btn-prev');
         this.btnNext = document.getElementById('btn-next');
         this.btnStats = document.getElementById('btn-stats');
@@ -167,13 +179,21 @@ const App = {
         this.btnSaveHabit = document.getElementById('btn-save-habit');
         this.btnDeleteHabit = document.getElementById('btn-delete-habit');
         
-        // Log elements
+        // Log View elements
         this.btnBackLog = document.getElementById('btn-back-log');
         this.logHabitName = document.getElementById('log-habit-name');
         this.logValueDisplay = document.getElementById('log-value');
         this.btnLogMinus = document.getElementById('btn-log-minus');
         this.btnLogPlus = document.getElementById('btn-log-plus');
         this.btnSaveLog = document.getElementById('btn-save-log');
+        
+        // Mass check-in elements
+        this.massStartDate = document.getElementById('mass-start-date');
+        this.massEndDate = document.getElementById('mass-end-date');
+        this.massValue = document.getElementById('mass-value');
+        this.btnMass0 = document.getElementById('btn-mass-0');
+        this.btnMass1 = document.getElementById('btn-mass-1');
+        this.btnMassApply = document.getElementById('btn-mass-apply');
         
         // Stats elements
         this.btnBackStats = document.getElementById('btn-back-stats');
@@ -189,6 +209,13 @@ const App = {
     },
     
     bindEvents() {
+        // Theme toggle
+        this.btnThemeToggle.addEventListener('click', () => {
+            const isLight = document.body.classList.toggle('light-theme');
+            localStorage.setItem('habit_tracker_theme', isLight ? 'light' : 'dark');
+            this.updateThemeIcon(isLight);
+        });
+
         // Main view nav
         this.btnSettings.addEventListener('click', () => this.switchView(this.settingsView));
         this.btnPrev.addEventListener('click', () => this.navigate(-1));
@@ -262,14 +289,23 @@ const App = {
         });
 
         this.btnSaveLog.addEventListener('click', () => {
-            const habits = DataManager.getData().habits;
-            if (habits.length > 0 && this.currentHabitIndex < habits.length) {
-                const currentHabit = habits[this.currentHabitIndex];
-                DataManager.trackDay(currentHabit.id, Utils.getTodayStr(), this.currentLogValue);
-                this.switchView(this.mainView);
-                this.renderMainView();
-            }
+            if (!this.loggingHabitId) return;
+            const data = DataManager.getData();
+            const habit = data.habits.find(h => h.id === this.loggingHabitId);
+            if (!habit) return;
+
+            const todayStr = Utils.getTodayStr();
+            habit.tracking[todayStr] = this.currentLogValue;
+            DataManager.saveData(data);
+            
+            this.switchView(this.mainView);
+            this.renderMainView();
         });
+
+        // Mass check-in
+        this.btnMass0.addEventListener('click', () => { this.massValue.value = 0; });
+        this.btnMass1.addEventListener('click', () => { this.massValue.value = 1; });
+        this.btnMassApply.addEventListener('click', () => this.applyMassCheckin());
 
         // Stats View
         this.btnBackStats.addEventListener('click', () => this.switchView(this.mainView));
@@ -336,9 +372,69 @@ const App = {
         if (touchendX > touchstartX + threshold) this.navigate(-1); // swipe right = prev
     },
 
+    applyMassCheckin() {
+        if (!this.loggingHabitId) return;
+        
+        const start = this.massStartDate.value;
+        const end = this.massEndDate.value;
+        const valStr = this.massValue.value;
+        
+        if (!start || !end || valStr === "") {
+            alert("Please provide a start date, end date, and a value.");
+            return;
+        }
+
+        const value = parseInt(valStr, 10);
+        if (isNaN(value) || value < 0) {
+            alert("Value must be a valid positive number.");
+            return;
+        }
+
+        let startDate = new Date(start + 'T12:00:00');
+        let endDate = new Date(end + 'T12:00:00');
+
+        if (startDate > endDate) {
+            alert("Start date must be before or equal to end date.");
+            return;
+        }
+
+        const data = DataManager.getData();
+        const habit = data.habits.find(h => h.id === this.loggingHabitId);
+        if (!habit) return;
+
+        let currentDate = new Date(startDate);
+        while (currentDate <= endDate) {
+            const yyyy = currentDate.getFullYear();
+            const mm = String(currentDate.getMonth() + 1).padStart(2, '0');
+            const dd = String(currentDate.getDate()).padStart(2, '0');
+            const dateStr = `${yyyy}-${mm}-${dd}`;
+            
+            habit.tracking[dateStr] = value;
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+
+        DataManager.saveData(data);
+        this.renderMainView();
+        
+        this.massStartDate.value = "";
+        this.massEndDate.value = "";
+        this.massValue.value = "";
+        this.switchView(this.mainView);
+    },
+
     switchView(view) {
         [this.mainView, this.createView, this.logView, this.statsView, this.settingsView].forEach(v => v.classList.add('hidden'));
         view.classList.remove('hidden');
+    },
+
+    updateThemeIcon(isLight) {
+        if (isLight) {
+            // Moon icon (switch to dark)
+            this.themeIcon.innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>`;
+        } else {
+            // Sun icon (switch to light)
+            this.themeIcon.innerHTML = `<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>`;
+        }
     },
 
     openCreateView() {
@@ -534,7 +630,6 @@ const App = {
         
         if (this.currentHabitIndex === maxIndex) {
             this.sessionControls.classList.add('invisible');
-            this.sessionControls.style.display = 'none'; // fully remove layout space to not push card? No wait, user wanted it not to shift. We'll use invisible to keep it taking up space.
             this.sessionControls.style.display = 'flex';
             
             const card = document.createElement('div');
@@ -546,6 +641,9 @@ const App = {
             card.addEventListener('click', () => this.openCreateView());
             this.cardContainer.appendChild(card);
             return;
+        } else {
+            this.sessionControls.classList.remove('invisible');
+            this.sessionControls.style.display = 'flex';
         }
 
         const habit = data.habits[this.currentHabitIndex];
