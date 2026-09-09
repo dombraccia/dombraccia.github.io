@@ -43,15 +43,17 @@
             <div id="pagination-dots"></div>
         </div>
 
-        <div id="create-view" class="view hidden">
-            <button class="back-link" id="btn-back-create">← Back</button>
-            <h2>Create New Habit</h2>
-            <div class="setup-group">
-                <label for="habit-name">Habit Name</label>
-                <input type="text" id="habit-name" placeholder="e.g. Read 10 pages, Drink Water">
-            </div>
-            <div class="actions">
-                <button id="btn-save-habit" class="primary">Save Habit</button>
+        <div id="create-view" class="view hidden" style="align-items: center; justify-content: center;">
+            <div class="habit-card" style="justify-content: flex-start; padding-top: 40px; position: relative;">
+                <button class="back-link" id="btn-back-create" style="position: absolute; top: 16px; left: 16px;">← Back</button>
+                <h2>Create New Habit</h2>
+                <div class="setup-group" style="width: 100%; margin-top: 20px;">
+                    <label for="habit-name">Habit Name</label>
+                    <input type="text" id="habit-name" placeholder="e.g. Read 10 pages">
+                </div>
+                <div class="actions" style="width: 100%; margin-top: auto; margin-bottom: 20px;">
+                    <button id="btn-save-habit" class="primary" style="width: 100%;">Save Habit</button>
+                </div>
             </div>
         </div>
 
