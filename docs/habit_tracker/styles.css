@@ -1317,7 +1317,7 @@ input:checked + .slider::before {
     padding: 24px;
     width: 420px;
     max-width: 90vw;
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 3 / 2;
     max-height: 70vh; /* Prevent overflowing off screen on small phones */
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -1327,6 +1327,7 @@ input:checked + .slider::before {
     align-items: center;
     justify-content: center;
     gap: 16px;
+    overflow-y: auto;
 }
 
 .empty-habit {
