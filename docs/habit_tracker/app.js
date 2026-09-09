@@ -71,13 +71,18 @@ const Utils = {
         return dates;
     },
     isDaySuccessful(habit, dateStr) {
-        // If unlogged, default to 0
-        const val = habit.tracking[dateStr] !== undefined ? habit.tracking[dateStr] : 0;
         if (habit.targetType === 'at_least') {
+            const val = habit.tracking[dateStr] !== undefined ? habit.tracking[dateStr] : 0;
             return val >= habit.targetValue;
         } else {
-            // at_most (e.g. reduce alcohol to 0)
-            return val <= habit.targetValue;
+            // at_most: evaluate as a monthly limit
+            const [year, month, day] = dateStr.split('-');
+            let sum = 0;
+            for (let i = 1; i <= parseInt(day, 10); i++) {
+                const d = `${year}-${month}-${String(i).padStart(2, '0')}`;
+                if (habit.tracking[d]) sum += habit.tracking[d];
+            }
+            return sum <= habit.targetValue;
         }
     },
     calculateStreak(habit) {
@@ -158,6 +163,7 @@ const App = {
         this.habitNameInput = document.getElementById('habit-name');
         this.habitTypeSelect = document.getElementById('habit-type');
         this.habitTargetInput = document.getElementById('habit-target');
+        this.habitTargetLabel = document.getElementById('habit-target-label');
         this.btnSaveHabit = document.getElementById('btn-save-habit');
         this.btnDeleteHabit = document.getElementById('btn-delete-habit');
         
@@ -193,6 +199,14 @@ const App = {
         this.btnEdit.addEventListener('click', () => this.openEditView());
 
         // Create/Edit View
+        this.habitTypeSelect.addEventListener('change', () => {
+            if (this.habitTypeSelect.value === 'at_least') {
+                this.habitTargetLabel.innerText = "Daily Target Value";
+            } else {
+                this.habitTargetLabel.innerText = "Monthly Limit";
+            }
+        });
+
         this.btnBackCreate.addEventListener('click', () => {
             if (this.editingHabitId === null) {
                 // If cancelling creation, make sure we go back correctly
@@ -332,6 +346,7 @@ const App = {
         this.createTitle.innerText = "Create New Habit";
         this.habitNameInput.value = '';
         this.habitTypeSelect.value = 'at_least';
+        this.habitTypeSelect.dispatchEvent(new Event('change'));
         this.habitTargetInput.value = '1';
         this.btnDeleteHabit.classList.add('hidden');
         this.switchView(this.createView);
@@ -347,6 +362,7 @@ const App = {
         this.createTitle.innerText = "Edit Habit";
         this.habitNameInput.value = habit.name;
         this.habitTypeSelect.value = habit.targetType;
+        this.habitTypeSelect.dispatchEvent(new Event('change'));
         this.habitTargetInput.value = habit.targetValue;
         this.btnDeleteHabit.classList.remove('hidden');
         
@@ -425,35 +441,72 @@ const App = {
     },
 
     renderGraph(habit) {
-        const daysCount = 30;
-        const pastDates = Utils.getPastDates(daysCount); // from oldest to newest
-        
-        const values = pastDates.map(dateStr => {
-            return habit.tracking[dateStr] !== undefined ? habit.tracking[dateStr] : 0;
-        });
-
-        const maxVal = Math.max(...values, habit.targetValue, 1); // min scale of 1
-        
-        // SVG coordinates: 0,0 is top-left
-        let points = "";
         const w = 100; // Percentage based width for viewBox
         const h = 100;
-        
-        for(let i=0; i<values.length; i++) {
-            const x = (i / (daysCount - 1)) * w;
-            const y = h - ((values[i] / maxVal) * h);
-            points += `${x},${y} `;
-        }
 
-        return `
-            <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="width: 100%; height: 100%; overflow: visible;">
-                <polyline points="${points}" fill="none" stroke="var(--accent-1)" stroke-width="2" />
-                <!-- Optional: Target line -->
-                <line x1="0" y1="${h - ((habit.targetValue / maxVal) * h)}" x2="100" y2="${h - ((habit.targetValue / maxVal) * h)}" stroke="var(--text-tertiary)" stroke-width="1" stroke-dasharray="2,2" />
-            </svg>
-            <div style="position: absolute; top: -10px; left: -25px; font-size: 10px; color: var(--text-secondary);">${maxVal}</div>
-            <div style="position: absolute; bottom: -5px; left: -15px; font-size: 10px; color: var(--text-secondary);">0</div>
-        `;
+        if (habit.targetType === 'at_least') {
+            const daysCount = 30;
+            const pastDates = Utils.getPastDates(daysCount);
+            
+            const values = pastDates.map(dateStr => {
+                return habit.tracking[dateStr] !== undefined ? habit.tracking[dateStr] : 0;
+            });
+
+            const maxVal = Math.max(...values, habit.targetValue, 1);
+            let points = "";
+            
+            for(let i=0; i<values.length; i++) {
+                const x = (i / (daysCount - 1)) * w;
+                const y = h - ((values[i] / maxVal) * h);
+                points += `${x},${y} `;
+            }
+
+            return `
+                <div style="text-align: center; font-size: 12px; margin-bottom: 5px; color: var(--text-secondary);">Daily Inputs (Last 30 Days)</div>
+                <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="width: 100%; height: 100%; overflow: visible;">
+                    <polyline points="${points}" fill="none" stroke="var(--accent-1)" stroke-width="2" />
+                    <line x1="0" y1="${h - ((habit.targetValue / maxVal) * h)}" x2="100" y2="${h - ((habit.targetValue / maxVal) * h)}" stroke="var(--text-tertiary)" stroke-width="1" stroke-dasharray="2,2" />
+                </svg>
+                <div style="position: absolute; top: 15px; left: -25px; font-size: 10px; color: var(--text-secondary);">${maxVal}</div>
+                <div style="position: absolute; bottom: -5px; left: -15px; font-size: 10px; color: var(--text-secondary);">0</div>
+            `;
+        } else {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const currentDay = today.getDate();
+            const daysInMonth = Utils.getDaysInMonth(year, today.getMonth());
+            
+            let cumulativeValues = [];
+            let currentSum = 0;
+            
+            for (let i = 1; i <= currentDay; i++) {
+                const dateStr = `${year}-${month}-${String(i).padStart(2, '0')}`;
+                if (habit.tracking[dateStr]) {
+                    currentSum += habit.tracking[dateStr];
+                }
+                cumulativeValues.push(currentSum);
+            }
+
+            const maxVal = Math.max(...cumulativeValues, habit.targetValue, 1);
+            let points = "";
+            
+            for(let i=0; i<cumulativeValues.length; i++) {
+                const x = (i / (daysInMonth - 1)) * w; // Scale so the graph spans the entire month width
+                const y = h - ((cumulativeValues[i] / maxVal) * h);
+                points += `${x},${y} `;
+            }
+
+            return `
+                <div style="text-align: center; font-size: 12px; margin-bottom: 5px; color: var(--text-secondary);">Cumulative Month Total</div>
+                <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="width: 100%; height: 100%; overflow: visible;">
+                    <polyline points="${points}" fill="none" stroke="var(--error)" stroke-width="2" />
+                    <line x1="0" y1="${h - ((habit.targetValue / maxVal) * h)}" x2="100" y2="${h - ((habit.targetValue / maxVal) * h)}" stroke="var(--text-tertiary)" stroke-width="1" stroke-dasharray="2,2" />
+                </svg>
+                <div style="position: absolute; top: 15px; left: -25px; font-size: 10px; color: var(--text-secondary);">${maxVal}</div>
+                <div style="position: absolute; bottom: -5px; left: -15px; font-size: 10px; color: var(--text-secondary);">0</div>
+            `;
+        }
     },
 
     renderMainView() {
