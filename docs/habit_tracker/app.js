@@ -339,6 +339,10 @@ const App = {
             const isLight = document.body.classList.toggle('light-theme');
             localStorage.setItem('habit_tracker_theme', isLight ? 'light' : 'dark');
             this.updateThemeIcon(isLight);
+            if (!this.statsView.classList.contains('hidden')) {
+                const habit = DataManager.getData().habits[this.currentHabitIndex];
+                if (habit) this.renderGraph(habit);
+            }
         });
 
         // Main view nav
@@ -535,6 +539,18 @@ const App = {
         this.btnMass0.addEventListener('click', () => { this.massValue.value = 0; });
         this.btnMass1.addEventListener('click', () => { this.massValue.value = 1; });
         this.btnMassApply.addEventListener('click', () => this.applyMassCheckin());
+
+        this.massStartDate.addEventListener('change', () => {
+            if (this.massStartDate.value && !this.massEndDate.value) {
+                this.massEndDate.value = this.massStartDate.value;
+            }
+        });
+        
+        this.massEndDate.addEventListener('change', () => {
+            if (this.massEndDate.value && !this.massStartDate.value) {
+                this.massStartDate.value = this.massEndDate.value;
+            }
+        });
 
         // Stats View
         this.btnBackStats.addEventListener('click', () => {
@@ -900,8 +916,19 @@ const App = {
         
         // Populate Summary Card
         const streakData = Utils.calculateStreak(habit);
-        this.summaryCurrentStreak.innerText = streakData.total;
-        this.summaryBestStreak.innerText = Utils.calculateBestStreak(habit);
+        
+        function formatNumber(num) {
+            let n = Number(num);
+            if (n % 1 === 0) {
+                return `<span style="display: inline-block; width: 40px; text-align: right;">${n}</span><span style="display: inline-block; width: 24px; text-align: left;"></span>`;
+            } else {
+                const parts = n.toFixed(1).split('.');
+                return `<span style="display: inline-block; width: 40px; text-align: right;">${parts[0]}</span><span style="display: inline-block; width: 24px; text-align: left;">.${parts[1]}</span>`;
+            }
+        }
+
+        this.summaryCurrentStreak.innerHTML = formatNumber(streakData.total);
+        this.summaryBestStreak.innerHTML = formatNumber(Utils.calculateBestStreak(habit));
         
         // Calculate Monthly Avg & Last Month
         let lastMonthSum = 0;
@@ -914,20 +941,19 @@ const App = {
         const lmMonthStr = String(lastMonthDate.getMonth() + 1).padStart(2, '0');
         const lmPrefix = `${lmYear}-${lmMonthStr}`;
 
-        Object.keys(habit.tracking).forEach(dateStr => {
+        const trackingKeys = Object.keys(habit.tracking);
+        trackingKeys.forEach(dateStr => {
             const val = habit.tracking[dateStr];
-            if (val > 0) {
-                totalSum += val;
-                monthsTracked.add(dateStr.substring(0, 7)); // YYYY-MM
-                if (dateStr.startsWith(lmPrefix)) {
-                    lastMonthSum += val;
-                }
+            totalSum += val;
+            if (dateStr.startsWith(lmPrefix)) {
+                lastMonthSum += val;
             }
         });
         
-        this.summaryLastMonth.innerText = lastMonthSum;
-        const avg = monthsTracked.size > 0 ? (totalSum / monthsTracked.size) : 0;
-        this.summaryMonthlyAvg.innerText = avg.toFixed(1);
+        this.summaryLastMonth.innerHTML = formatNumber(lastMonthSum);
+        const daysLogged = trackingKeys.length;
+        const avg = daysLogged > 0 ? (totalSum * 30 / daysLogged) : 0;
+        this.summaryMonthlyAvg.innerHTML = formatNumber(avg);
 
         this.statsDate = new Date(); // Start at current month
         this.updateStatsCalendar();
@@ -968,14 +994,29 @@ const App = {
             const dStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
             let classes = ['cal-cell'];
             
-            const cellDate = new Date(dStr);
-            if (cellDate <= new Date(todayStr)) {
+            const cellDate = new Date(dStr + 'T12:00:00');
+            const todayDate = new Date(todayStr + 'T12:00:00');
+            
+            // Determine start date to not color days before habit existed
+            let startDate = new Date(habit.created.split('T')[0] + 'T12:00:00');
+            const trackedDates = Object.keys(habit.tracking);
+            if (trackedDates.length > 0) {
+                const earliestTracked = new Date(trackedDates.sort()[0] + 'T12:00:00');
+                if (earliestTracked < startDate) {
+                    startDate = earliestTracked;
+                }
+            }
+
+            if (cellDate <= todayDate) {
                 if (habit.tracking[dStr] !== undefined) {
                     if (Utils.isDaySuccessful(habit, dStr)) {
                         classes.push('cal-done');
                     } else {
                         classes.push('cal-missed');
                     }
+                } else if (habit.targetType === 'at_most' && cellDate >= startDate) {
+                    // For stop habits, an unlogged day after creation is a success (0 value)
+                    classes.push('cal-done');
                 }
             } else {
                 classes.push('cal-future');
@@ -1058,12 +1099,35 @@ const App = {
             });
         }
         
-        const tickConfig = {
-            color: 'rgba(255, 255, 255, 0.6)',
+        const isLightMode = document.body.classList.contains('light-theme');
+        const axisColor = isLightMode ? 'rgba(0, 0, 0, 0.6)' : 'rgba(255, 255, 255, 0.6)';
+        const gridColor = isLightMode ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)';
+
+        function getStepSize(maxVal) {
+            if (maxVal <= 5) return 1;
+            if (maxVal <= 25) return 5;
+            if (maxVal <= 59) return 10;
+            if (maxVal <= 100) return 25;
+            if (maxVal <= 500) return 100;
+            return 500;
+        }
+
+        const maxLineVal = Math.max(...cumulativeData, ...limitData, 0);
+        const maxBarVal = Math.max(...dailyData, 0);
+
+        const tickConfigLine = {
+            color: axisColor,
+            stepSize: getStepSize(maxLineVal),
             callback: function(value) {
-                if (Math.floor(value) === value) {
-                    return value;
-                }
+                if (Math.floor(value) === value) return value;
+            }
+        };
+
+        const tickConfigBar = {
+            color: axisColor,
+            stepSize: getStepSize(maxBarVal),
+            callback: function(value) {
+                if (Math.floor(value) === value) return value;
             }
         };
 
@@ -1080,12 +1144,12 @@ const App = {
                 scales: {
                     y: {
                         beginAtZero: true,
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                        ticks: tickConfig
+                        grid: { color: gridColor },
+                        ticks: tickConfigLine
                     },
                     x: {
                         grid: { display: false },
-                        ticks: { color: 'rgba(255, 255, 255, 0.6)', maxTicksLimit: 6 }
+                        ticks: { color: axisColor, maxTicksLimit: 6 }
                     }
                 },
                 plugins: { legend: { display: false } }
@@ -1110,12 +1174,12 @@ const App = {
                 scales: {
                     y: {
                         beginAtZero: true,
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                        ticks: tickConfig
+                        grid: { color: gridColor },
+                        ticks: tickConfigBar
                     },
                     x: {
                         grid: { display: false },
-                        ticks: { color: 'rgba(255, 255, 255, 0.6)', maxTicksLimit: 6 }
+                        ticks: { color: axisColor, maxTicksLimit: 6 }
                     }
                 },
                 plugins: { legend: { display: false } }
